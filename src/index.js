@@ -20,7 +20,7 @@ const store=createStore(rootReducers,composeWithDevTools(applyMiddleware(logger,
 ReactDOM.render( 
     <Provider store={ store }>
        <Router routers={routers}>
-          <NavigationBar />
+          {/* <NavigationBar /> */}
             {routers}
        </Router>
     </Provider>,

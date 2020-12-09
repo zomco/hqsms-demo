@@ -6,6 +6,12 @@ const api={
     },
     postRenlian(param){
         return httpPost(base.ownUrl+base.renlian,param)
+    },
+    getCameraVehicle(){
+        return httpGet(base.ownUrl+base.CameraVehicle)
+    },
+    getWeather(){
+        return httpGet(base.ownUrl+base.Weather)
     }
 }
 export default api
