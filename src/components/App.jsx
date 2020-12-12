@@ -5,7 +5,7 @@ import CameraVehicle from "./Camera/CameraVehicle"
 import Weather from "./Weather/Weather"
 import { BrowserRouter as Router,Route,Link } from "react-router-dom"
 import 'antd/dist/antd.css';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+// import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import { Layout,Menu} from 'antd';
 // 引入子菜单组件
 const SubMenu = Menu.SubMenu

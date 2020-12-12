@@ -4,7 +4,8 @@ import { Table,DatePicker, Space } from 'antd'
 import moment from 'moment'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
-import { render } from 'react-dom';
+import { Modal, Button } from 'antd';
+import Draggable from 'react-draggable';
 
     const { RangePicker } = DatePicker
     const dateFormat = 'YYYY-MM-DD'
@@ -51,32 +52,142 @@ import { render } from 'react-dom';
             dataIndex: 'pa',
         },
     ];
-    const list=[];
-    const weatherList=[];
+    const columns2=[
+        {
+            title: '名称',
+            dataIndex: 'name',
+            
+        },
+        {
+            title: '最小值',
+            dataIndex: 'mini',
+            
+        },
+        {
+            title: '平均值',
+            dataIndex: 'average',
+            
+        },
+        {
+            title: '最大值',
+            dataIndex: 'max',
+            
+        },
+    ];
+    let list=[];
+    let weatherList=[];
+    // 温度
+    let taArr=[];
+    let maxTa="";
+    let miniTa="";
+    // 湿度
+    let uaArr=[];
+    let maxUa="";
+    let miniUa="";
+    // 气压
+    let paArr=[];
+    let maxPa="";
+    let miniPa="";
+
+    let data=[
+    {
+        key:'1',
+        name:'温度',
+        mini:miniTa,
+        average:'',
+        max:maxTa
+    },
+    {
+        key:'2',
+        name:'湿度',
+        mini:miniUa,
+        average:'',
+        max:maxUa
+    },
+    {
+        key:'3',
+        name:'气压',
+        mini:miniPa,
+        average:'',
+        max:maxPa
+    },
+    {
+        key:'4',
+        name:'风速',
+        mini:'0',
+        average:'0',
+        max:'0'
+    },
+    
+    ];
+  
+    
+
+    function getData(weatherList){
+        weatherList.map((item,index)=>{
+            taArr.push(item['ta']);
+            uaArr.push(item['ua']);
+            paArr.push(item['pa']);
+        })
+        
+        maxTa=Math.max(...taArr);
+        miniTa=Math.min(...taArr);
+        maxUa=Math.max(...uaArr);
+        miniUa=Math.min(...uaArr);
+        maxPa=Math.max(...paArr);
+        miniPa=Math.min(...paArr);
+
+
+    }
     function tableChange(pagination, filters,  extra) {
         console.log('params', pagination, filters, extra);
     }
-//   只能选择当前时间天数之前的时间
+    //只能选择当前时间天数之前的时间
     const disabledDate = (current) => {
         return current > moment().startOf('day');
     }
-    
     export default class Weather extends React.Component{
         constructor(){
             super()
             this.state={
-                date:[]
+                date1:[],
+                date2:[],
+                visible: false,
+                disabled: true,
             }
             this.dateChange=this.dateChange.bind(this)
         }
         dateChange=(datas,dateStrings)=>{
             this.setState({
-                date:dateStrings
-            })
+                // date1:parseInt(dateStrings[0].replace("-","").replace("-","")),
+                // date2:parseInt(dateStrings[1].replace("-","").replace("-",""))
+                date1:dateStrings[0],
+                date2:dateStrings[1]
+            });
         }
-            
+        showModal = () => {
+            this.setState({
+              visible: true,
+            });
+          };
+        
+          handleOk = e => {
+            console.log(e);
+            this.setState({
+              visible: false,
+            });
+          };
+        
+          handleCancel = e => {
+            console.log(e);
+            this.setState({
+              visible: false,
+            });
+          };
+        
         
         componentDidMount(){
+            list=[]
             api.getWeather()
             .then(res=>res.json())
             .then(data=>{
@@ -94,22 +205,46 @@ import { render } from 'react-dom';
                         sx:element.sx,
                         ta:element.ta,
                         ua:element.ua,
-                        pa:element.pa
+                        pa:element.pa/10
                     })
                 })   
             })
     
         }
         render(){
-            let {date} =this.state
-            const date1=date[0].replace("-","");
-            const date2=date[1].replace("-","");
-            const d1=parseInt(date1)
-            const d2=parseInt(date2)
-            console.log(d1);
-            console.log(d2);
-            console.log(date);
-            // console.log(list);
+            let {date1} =this.state;
+            let {date2} =this.state;
+            // 先清空，然后在往里面添加
+            weatherList=[]
+            list.map((item,index)=>{
+                // console.log(date1+"/"+item.createdAt+"/"+date2);                 
+                // console.log(date1<item.createdAt&&item.createdAt<date2);
+                // let a = parseInt(item.createdAt.replace("-","").replace("-","")) 
+                if (date1<=item.createdAt&&item.createdAt<=date2) {
+                    
+                    weatherList.push({
+                        key:index,
+                        createdAt:item.createdAt,
+                        dn:item.dn,
+                        dm:item.dm,
+                        dx:item.dx,
+                        sn:item.sn,
+                        sm:item.sm,
+                        sx:item.sx,
+                        ta:item.ta,
+                        ua:item.ua,
+                        pa:item.pa
+                    })
+                }
+            })
+            getData(weatherList);
+        // console.log(date1);
+        // console.log(list);
+            // 这个是我之前换的方法
+            // let a=list.find(item=>date1<=item.createdAt&&item.createdAt<=date2)
+            // console.log(a);
+            // let a=list.find(item=>item.createdAt==="2020-12-03")
+            
             return(
                 <div>
                     <h1>气象传感器</h1>
@@ -135,29 +270,47 @@ import { render } from 'react-dom';
                         }}
                         />
                     </Space>,
-                    <br/>
-                    <br/>
-                    {/* 表格 */}
-                    {   
-                        list.map((item,index)=>{
-                            if (date[0]<item.createdAt<date[1]) {
-                                weatherList.push({
-                                    key:index,
-                                    createdAt:item.createdAt.substring(0,10),
-                                    dn:item.dn,
-                                    dm:item.dm,
-                                    dx:item.dx,
-                                    sn:item.sn,
-                                    sm:item.sm,
-                                    sx:item.sx,
-                                    ta:item.ta,
-                                    ua:item.ua,
-                                    pa:item.pa
-                                })
+
+                    <Button onClick={this.showModal}>查看</Button>
+                    <Modal
+                    title={
+                        <div
+                        style={{
+                            width: '100%',
+                            cursor: 'move',
+                        }}
+                        onMouseOver={() => {
+                            if (this.state.disabled) {
+                            this.setState({
+                                disabled: false,
+                            });
                             }
-                        })
-                    }
-                    <Table size="middle" center columns={columns} onChange={tableChange} dataSource={weatherList}/>
+                        }}
+                        onMouseOut={() => {
+                            this.setState({
+                            disabled: true,
+                            });
+                        }}
+                        // fix eslintjsx-a11y/mouse-events-have-key-events
+                        // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/mouse-events-have-key-events.md
+                        onFocus={() => {}}
+                        onBlur={() => {}}
+                        // end
+                        >
+                        <h5>{date1}-----{date2}</h5>
+                        </div>
+                        }
+                        visible={this.state.visible}
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                        modalRender={modal => <Draggable disabled={this.state.disabled}>{modal}</Draggable>}
+                        >
+                        <Table size="small" center columns={columns2} dataSource={data}/>
+                        </Modal>
+                    <br/>
+                    <br/>
+                    
+                    <Table size="middle" center columns={columns} onChange={tableChange} dataSource={list}/>
                     
             </div>
             )
