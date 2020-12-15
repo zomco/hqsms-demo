@@ -2,17 +2,9 @@ import React from 'react'
 import api from '../../api/index'
 import {
     Form,
-    Select,
-    InputNumber,
-    Switch,
-    Radio,
-    Slider,
-    Button,
     Upload,
-    Rate,
-    Checkbox,
-    Row,
-    Col,
+    List,
+    Card
   } from 'antd'
   import { InboxOutlined } from '@ant-design/icons';
 
@@ -27,6 +19,9 @@ const handleFnishi=(data)=>{
     console.log(data);
 }  
 
+
+
+
 export default class CameraHuman extends React.Component{
     constructor(props){
         super(props);
@@ -35,6 +30,7 @@ export default class CameraHuman extends React.Component{
             data:[]
         }
     }
+        
     componentDidMount(){
         api.getCameraHuman()
         .then(res=>res.json())
@@ -46,6 +42,13 @@ export default class CameraHuman extends React.Component{
         })
     }
     render(){
+        let faceUrl=""
+        let getData=[]
+        getData.push (this.state.data.map((element,index)=>{
+            faceUrl="http://localhost:8080/file/"+element.faceUrl
+            return <img key={index} src={faceUrl} alt="" style={{width:'64px',height:'80px'}}/>
+            }))
+        console.log(getData);
         return(
             
             <div>
@@ -62,14 +65,26 @@ export default class CameraHuman extends React.Component{
 
                 
                  <h1>人脸图片：</h1>
-                {
+                 <List
+                grid={{
+                column:24,
+                gutter:10,
+                }}
+                pagination={{onChange:page=>{console.log(page);},pageSize:144,defaultCurrent:1}}
+                dataSource={getData[0]}
+                renderItem={item=>(
+                    <List.Item>
+                    {item}
+                    </List.Item>
+                )}/>
+                 {/* <Pagination defaultCurrent={1} total={500} onChange={onChange} defaultPageSize={100} /> */}
+                {/* {
                     this.state.data.map((element,index)=>{
                         let faceUrl="http://localhost:8080/file/"+element.faceUrl
-                        // console.log(faceUrl);
                         return <img key={index} src={faceUrl} alt="" style={{width:'64px',height:'80px',padding:'0 3px 3px 0'}}/>
                     })
                 }
-
+                 */}
                 
             </div>
         )

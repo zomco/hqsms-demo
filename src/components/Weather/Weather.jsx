@@ -74,71 +74,72 @@ import Draggable from 'react-draggable';
             
         },
     ];
-    let list=[];
-    let weatherList=[];
+    let list=[]
+    let weatherList=[]
     // 温度
-    let taArr=[];
-    let maxTa="";
-    let miniTa="";
+    let taArr=[]
+    let maxTa;
+    let miniTa;
+    let avgTa;
     // 湿度
-    let uaArr=[];
-    let maxUa="";
-    let miniUa="";
+    let uaArr=[]
+    let maxUa;
+    let miniUa;
+    let avgUa;
     // 气压
     let paArr=[];
-    let maxPa="";
-    let miniPa="";
+    let maxPa;
+    let miniPa;
+    let avgPa;
 
-    let data=[
-    {
-        key:'1',
-        name:'温度',
-        mini:miniTa,
-        average:'',
-        max:maxTa
-    },
-    {
-        key:'2',
-        name:'湿度',
-        mini:miniUa,
-        average:'',
-        max:maxUa
-    },
-    {
-        key:'3',
-        name:'气压',
-        mini:miniPa,
-        average:'',
-        max:maxPa
-    },
-    {
-        key:'4',
-        name:'风速',
-        mini:'0',
-        average:'0',
-        max:'0'
-    },
-    
-    ];
-  
-    
-
-    function getData(weatherList){
-        weatherList.map((item,index)=>{
+function getData(weatherList){
+        taArr=[];
+        uaArr=[];
+        paArr=[];
+        weatherList.map((item)=>{
             taArr.push(item['ta']);
             uaArr.push(item['ua']);
             paArr.push(item['pa']);
         })
-        
+        // console.log(taArr);
         maxTa=Math.max(...taArr);
         miniTa=Math.min(...taArr);
+        if (taArr.length!=0) {
+            avgTa=taArr.reduce((num,item,index)=>{
+                if(index !=taArr.length-1){
+                    return (num+item)
+                }else{
+                    return (num+item)/taArr.length
+                }
+            })
+        }
+        
         maxUa=Math.max(...uaArr);
         miniUa=Math.min(...uaArr);
+        if (uaArr.length!=0) {
+            avgUa=uaArr.reduce((num,item,index)=>{
+                if(index !=uaArr.length-1){
+                    return (num+item)
+                }else{
+                    return (num+item)/uaArr.length
+                }
+            })
+        }
         maxPa=Math.max(...paArr);
         miniPa=Math.min(...paArr);
+        if(paArr.length!=0){
+            avgPa=paArr.reduce((num,item,index)=>{
+                if(index !=paArr.length-1){
+                    return (num+item)
+                }else{
+                    return (num+item)/paArr.length
+                }
+            })
+        }
+        }
+        
 
-
-    }
+    
     function tableChange(pagination, filters,  extra) {
         console.log('params', pagination, filters, extra);
     }
@@ -152,6 +153,7 @@ import Draggable from 'react-draggable';
             this.state={
                 date1:[],
                 date2:[],
+                data:[],
                 visible: false,
                 disabled: true,
             }
@@ -164,10 +166,42 @@ import Draggable from 'react-draggable';
                 date1:dateStrings[0],
                 date2:dateStrings[1]
             });
+            
         }
+        
         showModal = () => {
             this.setState({
               visible: true,
+              data:[
+                {
+                    key:'1',
+                    name:'温度',
+                    mini:miniTa,
+                    average:avgTa.toFixed(2),
+                    max:maxTa
+                },
+                {
+                    key:'2',
+                    name:'湿度',
+                    mini:miniUa,
+                    average:avgUa.toFixed(2),
+                    max:maxUa
+                },
+                {
+                    key:'3',
+                    name:'气压',
+                    mini:miniPa,
+                    average:avgPa.toFixed(2),
+                    max:maxPa
+                },
+                {
+                    key:'4',
+                    name:'风速',
+                    mini:'0',
+                    average:'0',
+                    max:'0'
+                },
+                ],
             });
           };
         
@@ -237,7 +271,7 @@ import Draggable from 'react-draggable';
                     })
                 }
             })
-            getData(weatherList);
+           getData(weatherList)
         // console.log(date1);
         // console.log(list);
             // 这个是我之前换的方法
@@ -303,9 +337,10 @@ import Draggable from 'react-draggable';
                         visible={this.state.visible}
                         onOk={this.handleOk}
                         onCancel={this.handleCancel}
-                        modalRender={modal => <Draggable disabled={this.state.disabled}>{modal}</Draggable>}
+                        modalRender={modal => <Draggable disabled={this.state.disabled}>{modal}</Draggable> }
                         >
-                        <Table size="small" center columns={columns2} dataSource={data}/>
+                        
+                        <Table size="small" center columns={columns2} dataSource={this.state.data}/>
                         </Modal>
                     <br/>
                     <br/>

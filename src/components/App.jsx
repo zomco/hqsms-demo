@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{lazy,Suspense} from 'react'
 import CameraVideo from "./Camera/CameraVideo"
 import CameraHuman from './Camera/CameraHuman'
 import CameraVehicle from "./Camera/CameraVehicle"
@@ -34,7 +34,7 @@ export default class App extends React.Component{
               key="sub2"
               title={<span><span>广播</span></span>}
             >
-               <Menu.Item key="2"><Link to="/camera">广播</Link></Menu.Item>
+               <Menu.Item key="2"><Link to="/broadcast">广播</Link></Menu.Item>
                <Menu.Item key="3"><Link to="/camera/human">广播</Link></Menu.Item>
                <Menu.Item key="4"><Link to="/camera/vehicle">广播</Link></Menu.Item>
             </SubMenu>

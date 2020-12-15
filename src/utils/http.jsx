@@ -16,3 +16,10 @@ export function httpPost(url,params){
     })
     return result
 }
+export function httpPut(url,params){
+    const result =fetch(url,{
+        method:"PUT",
+        body:qs.stringify(params)
+    })
+    return result
+}
