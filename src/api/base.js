@@ -3,6 +3,8 @@ const base={
     CameraHuman:"/camera/human",
     renlian:"/camera/human/feature",
     CameraVehicle:"/camera/vehicle",
-    Weather:"/weather/1/log"
+    Weather:"/weather/1/log",
+    Broadcast:"/broadcast",
+    BroadcastContent:"/broadcast/content"
   }
   export default base 

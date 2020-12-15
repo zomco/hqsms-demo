@@ -220,7 +220,7 @@ function getData(weatherList){
           };
         
         
-        componentDidMount(){
+          componentWillMount(){
             list=[]
             api.getWeather()
             .then(res=>res.json())

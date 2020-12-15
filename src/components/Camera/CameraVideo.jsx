@@ -1,6 +1,7 @@
 import React,{useEffect} from 'react'
 import flvjs from "flv.js";
 import { Button } from 'antd';
+import { UpCircleOutlined,DownCircleOutlined,LeftCircleOutlined,RightCircleOutlined} from '@ant-design/icons';
 
 export default class CameraVideo extends React.Component{
     componentDidMount(){
@@ -8,7 +9,7 @@ export default class CameraVideo extends React.Component{
             var videoElement = document.getElementById('videoElement');
             var flvPlayer = flvjs.createPlayer({
                 type: 'flv',
-                url: 'http://192.168.31.14:8080/live?port=1935&app=myapp&stream=mystream',
+                url: 'http://127.0.0.1:85/live/test.flv',
                 config:{
                     enableWorker: true,
                     enableStashBuffer: false,
@@ -25,7 +26,7 @@ export default class CameraVideo extends React.Component{
     }
     render(){
         return(
-            <div className="container">
+            <div>
             <h1>实时视频</h1>
             <video id="videoElement" controls muted style={{width:'1100px',height:'800px'}}></video>
             {

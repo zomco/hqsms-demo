@@ -12,6 +12,9 @@ const api={
     },
     getWeather(){
         return httpGet(base.ownUrl+base.Weather)
+    },
+    getBroadcast(){
+        return httpGet(base.ownUrl+base.Broadcast)
     }
 }
 export default api
