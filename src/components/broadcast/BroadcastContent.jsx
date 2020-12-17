@@ -3,12 +3,6 @@ import api from '../../api'
 import { Upload, Button, message,Modal,Form,Input,Table,Popconfirm } from 'antd';
 import { render } from 'react-dom'
 
-
-
-
-
-
-
 export default class Broadcast extends React.Component{
   
   constructor(){
@@ -58,12 +52,12 @@ export default class Broadcast extends React.Component{
         ) : null,
       },
       ];
-    // this.getUrl.onChange = this.onChange.bind(this)
     this.state={
       list : [],
       fileList: [],
       isModalVisible  : false,
-      setIsModalVisible :false
+      setIsModalVisible :false,
+      programId:0
     }
     
     }
@@ -110,23 +104,30 @@ export default class Broadcast extends React.Component{
         console.log(info.file, info.fileList);
       }
       if (info.file.status === 'done') {
+        // console.log(info.file.response.ProgramId);
           this.setState({
             isModalVisible  : true,
+            programId:info.file.response.ProgramId
           })
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 上传失败`);
       }
     }
+    
      // 提示实时播放弹窗
     handleOk = () => {
+      console.log(this.state.programId);
       this.setState({
         isModalVisible:false
       });
       api.postBroadcastCreateSession({"termIds":[2]})
-      .then(res=>(res.json))
+      .then(res=>res.json())
       .then(data=>{
-        api.postBroadcastSetandPlay({"sessionId":data.sessionId,"programId":42})
-        .then(res=>(res.json))
+        console.log(data.sessionId);
+        console.log(this.state.programId);
+        api.postBroadcastSetandPlay({"sessionId":data.sessionId,"programId":this.state.programId})
+        .then(res=>res.json())
+        .then(data=>console.log(data))
       })
     };
     handleCancel = () => {
@@ -135,105 +136,11 @@ export default class Broadcast extends React.Component{
         })
       };
     render(){
-        interface Values {
-            title: string;
-            description: string;
-            modifier: string;
-          }
-          
-        interface CollectionCreateFormProps {
-        visible: boolean;
-        onCreate: (values: Values) => void;
-        onCancel: () => void;
-        }
-        
-
-        const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
-        visible,
-        onCreate,
-        onCancel,
-        }) => {
-        const [form] = Form.useForm();
-            return (
-              <Modal
-                visible={visible}
-                title="创建广播任务"
-                okText="确认"
-                cancelText="取消"
-                onCancel={onCancel}
-                onOk={() => {
-                  form
-                    .validateFields()
-                    .then(values => {
-                      form.resetFields();
-                      onCreate(values);
-                    })
-                    .catch(info => {
-                      console.log('Validate Failed:', info);
-                    });
-                }}
-              >
-                <Form
-                  form={form}
-                  layout="vertical"
-                  name="form_in_modal"
-                  initialValues={{ modifier: 'public' }}
-                >
-                  <Form.Item
-                    name="title"
-                    label="Title"
-                    rules={[{ required: true, message: 'Please input the title of collection!' }]}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item name="description" label="Description">
-                    <Input type="textarea" />
-                  </Form.Item>
-                  {/* <Form.Item name="modifier" className="collection-create-form_last-form-item">
-                    <Radio.Group>
-                      <Radio value="public">Public</Radio>
-                      <Radio value="private">Private</Radio>
-                    </Radio.Group>
-                  </Form.Item> */}
-                </Form>
-              </Modal>
-            );
-          };
-        
-        const CollectionsPage = () => {
-            const [visible, setVisible] = useState(false);
-          
-            const onCreate = values => {
-              console.log('Received values of form: ', values);
-              setVisible(false);
-            };
-          
-        return (
-            <div>
-            <Button
-                type="primary"
-                onClick={() => {
-                setVisible(true);
-                }}
-            >
-                新增
-            </Button>
-            <CollectionCreateForm
-                visible={visible}
-                onCreate={onCreate}
-                onCancel={() => {
-                setVisible(false);
-                }}
-            />
-            </div>
-        );
-        };
-       
+   
     return (
         <div>
             <h1>广播</h1>
-            {/* 创建实时播放任务 */}
-            <CollectionsPage />
+            
              {/* 实时播放弹窗 */}
              <Modal width={300} title="上传成功！！" visible={this.state.isModalVisible} onOk={this.handleOk} onCancel={this.handleCancel}>
               <p>请问是否实时播放？</p>
