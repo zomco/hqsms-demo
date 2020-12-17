@@ -5,6 +5,8 @@ const base={
     CameraVehicle:"/camera/vehicle",
     Weather:"/weather/1/log",
     Broadcast:"/broadcast",
-    BroadcastContent:"/broadcast/content"
+    BroadcastContent:"/broadcast/content",
+    BroadcastCreateSession:"/broadcast/content/createSession",
+    BroadcastSetandPlay:"/broadcast/content/setAndPlay"
   }
   export default base 

@@ -1,8 +1,5 @@
 import React from 'react'
 import api from '../../api'
-import { Upload, Button, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import reqwest from 'reqwest';
 
 let info = []
 export default class Broadcast extends React.Component{
@@ -29,85 +26,10 @@ export default class Broadcast extends React.Component{
         });
         
     }
-    state = {
-        fileList: [],
-        uploading: false,
-        
-      };
-      handleUpload = () => {
-        const { fileList } = this.state;
-        const formData = new FormData();
-        fileList.forEach(file => {
-          formData.append('file', file);
-        });
-    
-        this.setState({
-          uploading: true,
-        });
-        // You can use any AJAX library you like
-        reqwest({
-            url: 'http://127.0.0.1:8080/broadcast/content/upload',
-            method: 'post',
-            processData: false,
-            data: formData,
-            success: (data) => {
-                console.log(data);
-            this.setState({
-                fileList: [],
-                uploading: false,
-            });
-            message.success('上传成功！');
-            },
-            error: (e) => {
-                console.log(e);
-            this.setState({
-                uploading: false,
-            });
-            message.error('上传失败！');
-            },
-        });
-        }; 
     render(){
-        console.log(info);
-        const { uploading, fileList } = this.state;
-        const props = {
-        onRemove: file => {
-            this.setState(state => {
-            const index = state.fileList.indexOf(file);
-            const newFileList = state.fileList.slice();
-            newFileList.splice(index, 1);
-            return {
-                fileList: newFileList,
-            };
-            });
-        },
-        beforeUpload: file => {
-            this.setState(state => ({
-            fileList: [...state.fileList, file],
-            }));
-            return false;
-        },
-        fileList,
-        };
-    
+        console.log(info);     
     return (
         <div>
-            <h1>广播</h1>
-            <Upload {...props}>
-            <Button icon={<UploadOutlined />}>请上传音频</Button>
-            </Upload>
-            <Button
-            type="primary"
-            onClick={this.handleUpload}
-            disabled={fileList.length === 0}
-            loading={uploading}
-            style={{ marginTop: 16 }}
-            >
-            {uploading ? 'Uploading' : 'Start Upload'}
-            </Button>
-            
-            <br/>
-            <br/>
             <h5>广播设备信息:</h5>
            
             {info.map((item,index)=>{
@@ -127,7 +49,6 @@ export default class Broadcast extends React.Component{
                       
             })}
 
-            <h5>广播内容信息：</h5>
             
         </div>
         )

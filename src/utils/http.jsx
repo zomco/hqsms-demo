@@ -9,10 +9,13 @@ export function httpPost(url,params){
         method:"POST",
         headers:{
     
-             "Content-type":'application/x-www-form-urlencoded',
-             "Accept":"application/json,text/plain,*/*"
+            //  "Content-type":'application/x-www-form-urlencoded',
+            "Content-type":'application/json',
+            "Accept":"application/json,text/plain,*/*",
+
         },
-        body:qs.stringify(params)
+        // body:qs.stringify(params)
+        body:JSON.stringify(params)
     })
     return result
 }
