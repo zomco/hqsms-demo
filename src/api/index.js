@@ -32,6 +32,10 @@ const api={
     // 实时播放
     postBroadcastSetandPlay(params){
         return httpPost(base.ownUrl+base.BroadcastSetandPlay,params)
+    },
+    // 定时任务
+    postBroadcastTask(params){
+        return httpPost(base.ownUrl+base.BroadcastTask,params)
     }
 }
 export default api

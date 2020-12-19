@@ -1,13 +1,97 @@
 import React,{useState} from 'react'
-import { Upload, Button, message,Modal,Form,Input,Table} from 'antd';
+import moment from 'moment'
+import 'moment/locale/zh-cn';
+import locale from 'antd/es/date-picker/locale/zh_CN';
+import { Button,Modal,Form,Input,Table,Select,Radio,DatePicker,Slider} from 'antd';
 import api from '../../api'
 
+const { Option } = Select;
+const { RangePicker } = DatePicker;
+const layout = {
+labelCol: { span: 5 },
+wrapperCol: { span: 18 },
+};
+const rangeConfig = {
+rules: [{ type: 'array', required: true, message: 'Please select time!' }],
+};
 
+let date1="";
+let date2="";
+
+let name="";
+let leixing;
+let xiangqing;
+let startTime;
+let repeatTime;
+let length;
+let playMode;
+let termIds=[];
+let programId=[];
+let enable;
+let endDate;
+let vol;
+let status;
 export default class BroadcastTask extends React.Component{
-    componentWillMount(){
-        
+    constructor(){
+        super();
+        this.state={
+            // name:"",
+            // leixing:"",
+            // xiangqing:"",
+            // startTime:"",
+            // repeatTime:"",
+            // length:"",
+            // playMode:"",
+            // termIds:[],
+            // programId:"",
+            // enable:"",
+            // endDate:"",
+            // vol:"",
+            // status:"",
+            
+
+        }
     }
+   
+    //    onChange1 = (e) => {
+    //         value1=e.target.value
+    //         judge1 = value2!==''?true:false
+           
+    //     }
+    //    onChange2 = (e) => {
+    //         value2=e.target.value 
+    //         judge2 = value1!==''?true:false
+    //     };
+    
+   
+    // componentDidMount(){
+    //     input1=document.getElementById("input1");
+    //     input2=document.getElementById("input2")
+    // }
+    onFinish = fieldsValue => {
+        const rangeTimeValue = fieldsValue['range-time-picker'];
+        const values = {
+        ...fieldsValue,
+        'range-time-picker': [
+        rangeTimeValue[0].format('YYYY-MM-DD HH:mm:ss'),
+        rangeTimeValue[1].format('YYYY-MM-DD HH:mm:ss'),
+        ],
+    };
+    console.log('Received values of form: ', values);
+    };
+    //只能选择当前时间天数之前的时间
+    disabledDate = (current) => {
+        return current < moment().startOf('day');
+    }
+    // 获取日期值
+    dateChange=(data,dateStrings)=>{
+            date1=dateStrings[0];
+            date2=dateStrings[1]
+    }
+
+
     render(){
+    
         interface Values {
             title: string;
             description: string;
@@ -40,34 +124,120 @@ export default class BroadcastTask extends React.Component{
                     .then(values => {
                       form.resetFields();
                       onCreate(values);
+                    //   发送创建计划请求
+                      api.postBroadcastTask({
+                        "taskName":name,
+                        "type":leixing,
+                        "startTime":startTime,
+                        "playMode" :playMode,
+                        "repeatTime":repeatTime,
+                        "termIds" : termIds,
+                        "programIds":programId,
+                        "enable" : enable
+                      })
+                      .then(res=>res.json())
+                      .then(data=>console.log(data))
                     })
-                    .catch(info => {
+                    .catch(info => { 
                       console.log('Validate Failed:', info);
-                    });
+                    
+                    })
                 }}
               >
                 <Form
                   form={form}
-                  layout="vertical"
-                  name="form_in_modal"
+                //   layout="vertical"
+                  {...layout}
+                  name="nest-messages"
                   initialValues={{ modifier: 'public' }}
                 >
-                  <Form.Item
+                    <Form.Item
                     name="name"
                     label="任务名称"
                     rules={[{ required: true, message: '请输入任务名称' }]}
-                  >
+                    >
                     <Input />
-                  </Form.Item>
-                  <Form.Item name="type" label="任务类型">
+                    </Form.Item>
+                    <Form.Item
+                    name="termIds"
+                    label="目标终端"
+                    rules={[{ required: true, message: '请输入目标终端' }]}
+                    >
                     <Input />
-                  </Form.Item>
-                  {/* <Form.Item name="modifier" className="collection-create-form_last-form-item">
-                    <Radio.Group>
-                      <Radio value="public">Public</Radio>
-                      <Radio value="private">Private</Radio>
-                    </Radio.Group>
-                  </Form.Item> */}
+                    </Form.Item>
+                    <Form.Item
+                    name="proramIds"
+                    label="内容编号"
+                    rules={[{ required: true, message: '请输入内容编号' }]}
+                    >
+                    <Input />
+                    </Form.Item>
+                    <Form.Item
+                    name="repeatTimes"
+                    label="重复次数"
+                    >
+                    <Input id="input1" onChange={this.onChange1} />
+                    </Form.Item>
+                    <Form.Item
+                    name="length"
+                    label="任务时长"
+                    >
+                    <Input id="input2" onChange={this.onChange2} />
+                    </Form.Item>
+
+                    <Form.Item name="range-time-picker" label="起止时间" {...layout} onFinish={this.onFinish} {...rangeConfig}>
+                        <RangePicker locale={locale} disabledDate={this.disabledDate} onChange={this.dateChange} showTime format="YYYY-MM-DD HH:mm:ss" />
+                    </Form.Item>
+
+                    <Form.Item label="任务类型" rules={[{ required: true}]}>
+                    <Input.Group compact>
+                    <Form.Item
+                        name={['type', 'leixing']}
+                        rules={[{ required: true, message: '请选择任务类型' }]}
+                    >
+                        <Select placeholder="类型">
+                        <Option value="1">日任务</Option>
+                        <Option value="2">周任务</Option>
+                        <Option value="3">月任务</Option>
+                        <Option value="4">一次性任务</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        name={['type', 'xiangqing']}
+                    >
+                        <Input style={{ width: '80%' }} placeholder="请输入详细时间" />
+                    </Form.Item>
+                    </Input.Group>
+                    </Form.Item>
+
+                    <Form.Item name="vol" label="音  量">
+                        <Slider
+                        marks={{
+                            0: '静音',
+                            33: '弱',
+                            66: '一般',
+                            99: '强',
+                        }}
+                        />
+                    </Form.Item>
+                    <Form.Item name="playMode" label="播放模式">
+                        <Radio.Group>
+                        <Radio value="0">顺序播放</Radio>
+                        <Radio value="1">随机播放</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+                    <Form.Item name="enable" label="是否冻结">
+                        <Radio.Group>
+                        <Radio value="0">冻结</Radio>
+                        <Radio value="1">启用</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+                    <Form.Item name="status" label="是否启动">
+                        <Radio.Group>
+                        <Radio value="0">启动</Radio>
+                        <Radio value="1">停止</Radio>
+                        </Radio.Group>
+                    </Form.Item>
                 </Form>
               </Modal>
             );
@@ -77,10 +247,45 @@ export default class BroadcastTask extends React.Component{
             const [visible, setVisible] = useState(false);
           
             const onCreate = values => {
-              console.log('Received values of form: ', values);
-              setVisible(false);
+                console.log('Received values of form: ', values);
+                // let a=[];
+                // let xq=[];
+                // if (values.xiangqing.length>=2) {
+                //     values.xiangqing.map(item=>{
+                //         xq.push(parseInt(item))
+                //     })
+                // }
+                // a.push(parseInt(values.termIds));
+                //   this.setState({
+                //     name:values.name,
+                //     leixing:parseInt(values.leixing),
+                //     xiangqing:values.xiangqing,
+                //     startTime:date1,
+                //     repeatTime:values.repeatTime,
+                //     length:values.length,
+                //     playMode:values.playMode,
+                //     termIds:a,
+                //     programId:values.programId,
+                //     enable:values.enable,
+                //     endData:date2,
+                //     vol:values.vol,
+                //     status:values.status
+                // })
+                // console.log(this.state.termIds);
+                termIds.push(parseInt(values.termIds));
+                name=values.name;
+                leixing=parseInt(values.leixing);
+                xiangqing=parseInt(values.xiangqing);
+                startTime=date1;
+                repeatTime=parseInt(values.repeatTime);
+                length=parseInt(values.length);
+                playMode=parseInt(values.playMode);
+                programId.push(parseInt(values.programId));
+                enable=parseInt(values.enable);
+                endDate=date2;
+                    setVisible(false);
             };
-          
+  
         return (
             <div>
             <Button

@@ -7,6 +7,7 @@ const base={
     Broadcast:"/broadcast",
     BroadcastContent:"/broadcast/content",
     BroadcastCreateSession:"/broadcast/content/createSession",
-    BroadcastSetandPlay:"/broadcast/content/setAndPlay"
+    BroadcastSetandPlay:"/broadcast/content/setAndPlay",
+    BroadcastTask:"/broadcast/task/create"
   }
   export default base 
