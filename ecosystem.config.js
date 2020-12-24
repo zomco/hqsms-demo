@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: 'hqsms-demo',
-    script: '/usr/lib/serve -s build',
+    script: '/usr/bin/serve -s build',
     watch: '.'
   }],
 
