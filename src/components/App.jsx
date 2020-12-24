@@ -57,7 +57,7 @@ export default class App extends React.Component{
           >
           <Route exact path="/camera" component={Camera} />
           </Content> */}
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+          <Footer style={{ textAlign: 'center' }}>HQSMS Demo ©2020 Created by Distlab</Footer>
         </Layout>
       </Layout>
      </Router> 
