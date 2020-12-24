@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: 'hqsms-demo',
-    script: './node_modules/react-scripts/scripts/start.js',
+    script: '/usr/lib/serve -s build',
     watch: '.'
   }],
 
@@ -13,7 +13,7 @@ module.exports = {
       repo : 'git@github.com:zomco/hqsms-demo.git',
       path : '/var/www/production',
       'pre-deploy-local': '',
-      'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production',
+      'post-deploy' : 'npm install && npm run build && pm2 reload ecosystem.config.js --env production',
       'pre-setup': ''
     }
   }
