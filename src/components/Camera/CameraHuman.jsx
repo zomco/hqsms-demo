@@ -26,7 +26,7 @@ export default class CameraHuman extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            baseUrl:"http://localhost:8080",
+            baseUrl:"http://47.115.144.65/api",
             data:[]
         }
     }
@@ -45,7 +45,7 @@ export default class CameraHuman extends React.Component{
         let faceUrl=""
         let getData=[]
         getData.push (this.state.data.map((element,index)=>{
-            faceUrl="http://localhost:8080/file/"+element.faceUrl
+            faceUrl="http://47.115.144.65/api/file/"+element.faceUrl
             return <img key={index} src={faceUrl} alt="" style={{width:'64px',height:'80px'}}/>
             }))
         console.log(getData);
@@ -54,7 +54,7 @@ export default class CameraHuman extends React.Component{
             <div>
                 <Form.Item style={{width:"200px"}}>
                     <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile}  noStyle>
-                        <Upload.Dragger name="flie" action="http://127.0.0.1:8080/camera/human/feature" onFinish={handleFnishi}> 
+                        <Upload.Dragger name="flie" action="http://47.115.144.65/api/camera/human/feature" onFinish={handleFnishi}> 
                             <p className="ant-upload-drag-icon">
                             <InboxOutlined />
                             </p>

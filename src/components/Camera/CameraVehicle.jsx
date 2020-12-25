@@ -40,7 +40,7 @@ export default class CameraVehicle extends React.Component{
             .then(data=>{
                 console.log(data);
                 this.setState({
-                    imgUrl:"http://localhost:8080/file/"+data[0].plateUrl
+                    imgUrl:"http://47.115.144.65/api/file/"+data[0].plateUrl
                 })
                 console.log(this.setState.imgUrl);
             })
@@ -70,7 +70,7 @@ export default class CameraVehicle extends React.Component{
         let plateUrl=""
         let getData=[]
         getData.push (this.state.data.map((element,index)=>{
-                plateUrl="http://localhost:8080/file/"+element.plateUrl
+                plateUrl="http://47.115.144.65/api/file/"+element.plateUrl
                 return <img key={index} src={plateUrl} alt="" width="160" height="80"/>
             }))
         console.log(getData);
