@@ -15,6 +15,7 @@ const rangeConfig = {
 rules: [{ type: 'array', required: true, message: 'Please select time!' }],
 };
 
+// 开始结束时间
 let date1="";
 let date2="";
 
@@ -31,43 +32,97 @@ let enable;
 let endDate;
 let vol;
 let status;
+
+let value1 ="";
+let value2 ="";
+let judge1=false;
+let judge2=false;
 export default class BroadcastTask extends React.Component{
     constructor(){
         super();
-        this.state={
-            // name:"",
-            // leixing:"",
-            // xiangqing:"",
-            // startTime:"",
-            // repeatTime:"",
-            // length:"",
-            // playMode:"",
-            // termIds:[],
-            // programId:"",
-            // enable:"",
-            // endDate:"",
-            // vol:"",
-            // status:"",
-            
+        this.columns=[
+            {
+                title: '广播id',
+                dataIndex: 'broadcastId', 
+            },
+            {
+                title: '时间',
+                dataIndex: 'createdAt', 
+            },
+            {
+                title: '是否冻结',
+                dataIndex: 'frozen', 
+            },
+            {
+                title: '任务id',
+                dataIndex: 'taskId', 
+            },
+            {
+                title: '任务名称',
+                dataIndex: 'taskName', 
+            },
+            {
+                title: '播放模式',
+                dataIndex: 'playMode', 
+            },
+            {
+                title: '循环次数',
+                dataIndex: 'repeatTime', 
+            },
+            {
+                title: '音频音量',
+                dataIndex: 'taskVol', 
+            },
+            {
+                title: '开始时间',
+                dataIndex: 'startTime', 
+            },
+        ]
 
-        }
+        this.state={
+            list:[]
+            }
+
     }
-   
-    //    onChange1 = (e) => {
-    //         value1=e.target.value
-    //         judge1 = value2!==''?true:false
-           
-    //     }
-    //    onChange2 = (e) => {
-    //         value2=e.target.value 
-    //         judge2 = value1!==''?true:false
-    //     };
     
+       onChange1 = (e) => {
+            e.preventDefault();
+            value1=e.target.value
+            judge2=true
+        }
+
+       onChange2 = (e) => {
+            e.preventDefault();
+            value2=e.target.value
+            judge1=true
+       }
    
-    // componentDidMount(){
-    //     input1=document.getElementById("input1");
-    //     input2=document.getElementById("input2")
-    // }
+    componentDidMount(){
+       let newList=[];
+       api.getBroadcastTaskContent()
+       .then(res=>res.json())
+       .then(data=>{
+           data.map((item,index)=>{
+           newList.push({
+               key:index,
+               broadcastId:item.broadcastId,
+               createdAt:item.createdAt.substring(0,19),
+               frozen:item.frozen===0?'冻结':'启用',
+               taskId:item.taskId,
+               taskName:item.taskName,
+               playMode:item.playMode===0?'随机播放':'顺序播放',
+               repeatTime:item.repeatTime,
+               taskVol:item.taskVol,
+               startTime:item.startTime
+           })
+       })
+       this.setState({
+        list:newList
+        })
+    })
+       
+
+    }
     onFinish = fieldsValue => {
         const rangeTimeValue = fieldsValue['range-time-picker'];
         const values = {
@@ -124,6 +179,7 @@ export default class BroadcastTask extends React.Component{
                     .then(values => {
                       form.resetFields();
                       onCreate(values);
+
                     //   发送创建计划请求
                       api.postBroadcastTask({
                         "taskName":name,
@@ -146,7 +202,6 @@ export default class BroadcastTask extends React.Component{
               >
                 <Form
                   form={form}
-                //   layout="vertical"
                   {...layout}
                   name="nest-messages"
                   initialValues={{ modifier: 'public' }}
@@ -176,13 +231,13 @@ export default class BroadcastTask extends React.Component{
                     name="repeatTimes"
                     label="重复次数"
                     >
-                    <Input id="input1" onChange={this.onChange1} />
+                    <Input id="input1" onChange={this.onChange1} value={value1} disabled={judge1} />
                     </Form.Item>
                     <Form.Item
                     name="length"
                     label="任务时长"
                     >
-                    <Input id="input2" onChange={this.onChange2} />
+                    <Input id="input2" onChange={this.onChange2} value={value2} disabled={judge2}/>
                     </Form.Item>
 
                     <Form.Item name="range-time-picker" label="起止时间" {...layout} onFinish={this.onFinish} {...rangeConfig}>
@@ -274,16 +329,18 @@ export default class BroadcastTask extends React.Component{
                 // console.log(this.state.termIds);
                 termIds.push(parseInt(values.termIds));
                 name=values.name;
-                leixing=parseInt(values.leixing);
+                leixing=parseInt(values.type.leixing);
                 xiangqing=parseInt(values.xiangqing);
                 startTime=date1;
-                repeatTime=parseInt(values.repeatTime);
+                repeatTime=parseInt(values.repeatTimes);
                 length=parseInt(values.length);
                 playMode=parseInt(values.playMode);
-                programId.push(parseInt(values.programId));
+                programId.push(parseInt(values.proramIds));
                 enable=parseInt(values.enable);
                 endDate=date2;
-                    setVisible(false);
+                setVisible(false);
+                
+
             };
   
         return (
@@ -310,7 +367,8 @@ export default class BroadcastTask extends React.Component{
         <div>
             <h5>广播定时任务:</h5>
             <CollectionsPage />
-            
+            <br/>
+            <Table columns={this.columns} dataSource={this.state.list}></Table>
         </div>
         )
     }

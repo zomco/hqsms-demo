@@ -1,7 +1,7 @@
-import React,{ useState } from 'react'
+import React from 'react'
 import api from '../../api'
-import { Upload, Button, message,Modal,Form,Input,Table,Popconfirm } from 'antd';
-import { render } from 'react-dom'
+import { Upload, Button, message,Modal,Table,Popconfirm } from 'antd';
+
 
 export default class Broadcast extends React.Component{
   
@@ -42,7 +42,7 @@ export default class Broadcast extends React.Component{
         render: (text, record) =>
         this.state.list.length >= 1 ? (
           <div>
-          <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
+          <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key,record.programId)}>
             <Button key={1} type={"primary"} danger style={{marginRight:"3px"}}>删除</Button>  
           </Popconfirm>
           <Upload {...this.getUrl} onChange={this.onChange} showUploadList={false}>
@@ -86,9 +86,16 @@ export default class Broadcast extends React.Component{
         }); 
     }
 
-    handleDelete = key => {
+    handleDelete = (key,programId) => {
       const list = [...this.state.list];
+      // const programId=list.filter(item=>item.programId)
       this.setState({ list: list.filter(item => item.key !== key) });
+      // console.log(programId);
+      api.BroadcastDelete({
+        "programId":parseInt(programId) 
+      })
+      .then(res=>res.json())
+      .then(data=>console.log(data))
     };
    
      // 实时播放弹窗
