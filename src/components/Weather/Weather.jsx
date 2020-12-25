@@ -104,7 +104,7 @@ function getData(weatherList){
         // console.log(taArr);
         maxTa=Math.max(...taArr);
         miniTa=Math.min(...taArr);
-        if (taArr.length!=0) {
+        if (taArr.length!==0) {
             avgTa=taArr.reduce((num,item,index)=>{
                 if(index !=taArr.length-1){
                     return (num+item)
@@ -116,7 +116,7 @@ function getData(weatherList){
         
         maxUa=Math.max(...uaArr);
         miniUa=Math.min(...uaArr);
-        if (uaArr.length!=0) {
+        if (uaArr.length!==0) {
             avgUa=uaArr.reduce((num,item,index)=>{
                 if(index !=uaArr.length-1){
                     return (num+item)
@@ -127,7 +127,7 @@ function getData(weatherList){
         }
         maxPa=Math.max(...paArr);
         miniPa=Math.min(...paArr);
-        if(paArr.length!=0){
+        if(paArr.length!==0){
             avgPa=paArr.reduce((num,item,index)=>{
                 if(index !=paArr.length-1){
                     return (num+item)
@@ -220,7 +220,7 @@ function getData(weatherList){
           };
         
         
-          componentWillMount(){
+          componentDidMount(){
             list=[]
             api.getWeather()
             .then(res=>res.json())

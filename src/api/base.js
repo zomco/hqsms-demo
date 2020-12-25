@@ -1,10 +1,21 @@
 const base={
-    ownUrl:"http://127.0.0.1:8080",
-    CameraHuman:"/camera/human",
-    renlian:"/camera/human/feature",
-    CameraVehicle:"/camera/vehicle",
+    ownUrl:"http://47.115.144.65/api",
+    CameraHuman:"/camera-humans",
+    renlian:"/camera-humans/feature",
+    CameraVehicle:"/camera-vehicles",
+    CameraLive:"/cameras/1/live",
+    CameraPtz:"/cameras/1/ptz",
+    CameraPlay:"/cameras/1/play",
+
     Weather:"/weather/1/log",
     Broadcast:"/broadcast",
-    BroadcastContent:"/broadcast/content"
+    BroadcastContent:"/broadcast/content",
+    BroadcastCreateSession:"/broadcast/content/createSession",
+    BroadcastSetandPlay:"/broadcast/content/setAndPlay",
+    BroadcastDelete:"/broadcast/content/delete",
+    BroadcastTask:"/broadcast/task/create",
+    BroadcastTaskContent:"/broadcast/task",
+
+
   }
   export default base 
