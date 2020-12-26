@@ -1,5 +1,6 @@
 const base={
     ownUrl:"http://47.115.144.65/api",
+
     CameraHuman:"/camera-humans",
     renlian:"/camera-humans/feature",
     CameraVehicle:"/camera-vehicles",
@@ -8,6 +9,7 @@ const base={
     CameraPlay:"/cameras/1/play",
 
     Weather:"/weather/1/log",
+
     Broadcast:"/broadcast",
     BroadcastContent:"/broadcast/content",
     BroadcastCreateSession:"/broadcast/content/createSession",
@@ -15,6 +17,8 @@ const base={
     BroadcastDelete:"/broadcast/content/delete",
     BroadcastTask:"/broadcast/task/create",
     BroadcastTaskContent:"/broadcast/task",
+
+    Screen:"/screen"
 
 
   }

@@ -4,22 +4,10 @@ import {
     Form,
     Upload,
     List,
-    Card
+    Statistic,
+    message
   } from 'antd'
   import { InboxOutlined } from '@ant-design/icons';
-
-    const normFile = e => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList
-  };
-const handleFnishi=(data)=>{
-    console.log(data);
-}  
-
-
 
 
 export default class CameraHuman extends React.Component{
@@ -27,16 +15,46 @@ export default class CameraHuman extends React.Component{
         super(props);
         this.state={
             baseUrl:"http://47.115.144.65/api",
-            data:[]
+            data:[],
+            imgList:[],
+      
         }
     }
-        
+   
+    normFile = e => {
+        console.log('Upload event:', e);
+        if (Array.isArray(e)) {
+          return e;
+        }
+        this.setState({
+            imgList:e.fileList
+        })
+        return e && e.fileList
+      };
+
+    handleChange=(info)=>{
+        if (info.file.status !=='done') {
+            if (info.file.status === 500) {
+                message.error('上传文件失败');
+                return  
+            }else{
+            this.setState({
+                imgList:info.fileList
+            })
+            }
+        }
+    
+    }
+
+
+    
     componentDidMount(){
         api.getCameraHuman()
         .then(res=>res.json())
         .then(data=>{
             this.setState({
-                data:data
+                data:data,
+               
             })
             
         })
@@ -49,22 +67,26 @@ export default class CameraHuman extends React.Component{
             return <img key={index} src={faceUrl} alt="" style={{width:'64px',height:'80px'}}/>
             }))
         console.log(getData);
+
+        
         return(
             
             <div>
                 <Form.Item style={{width:"200px"}}>
-                    <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile}  noStyle>
-                        <Upload.Dragger name="flie" action="http://47.115.144.65/api/camera/human/feature" onFinish={handleFnishi}> 
+                    <Form.Item name="dragger"  valuePropName="fileList" getValueFromEvent={this.normFile}  noStyle>
+                        <Upload.Dragger action="http://192.168.1.20:8080/api/camera-humans/feature" data={this.state.imgList} onChange={this.handleChange}> 
                             <p className="ant-upload-drag-icon">
-                            <InboxOutlined />
+                        <InboxOutlined />
                             </p>
                             <p className="ant-upload-text">请上传人脸图片</p>
                         </Upload.Dragger>
                     </Form.Item>
                 </Form.Item>
-
                 
-                 <h1>人脸图片：</h1>
+                <div className="up" style={{overflow:"hidden"}}>
+                 <h1 style={{float:"left"}}>人脸图片：</h1>
+                 <Statistic title="人流量" value={getData[0].length} style={{float:"left"}}/>
+                </div>
                  <List
                 grid={{
                 column:24,
@@ -77,14 +99,6 @@ export default class CameraHuman extends React.Component{
                     {item}
                     </List.Item>
                 )}/>
-                 {/* <Pagination defaultCurrent={1} total={500} onChange={onChange} defaultPageSize={100} /> */}
-                {/* {
-                    this.state.data.map((element,index)=>{
-                        let faceUrl="http://localhost:8080/file/"+element.faceUrl
-                        return <img key={index} src={faceUrl} alt="" style={{width:'64px',height:'80px',padding:'0 3px 3px 0'}}/>
-                    })
-                }
-                 */}
                 
             </div>
         )
