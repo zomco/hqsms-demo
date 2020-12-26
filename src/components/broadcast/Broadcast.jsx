@@ -9,7 +9,7 @@ export default class Broadcast extends React.Component{
         .then(res=>res.json())
         .then(data=>{
             console.log(data);
-            data.map(element => {
+            data.map(element => (
                info.push({
                     code:element.code,
                     model:element.model,
@@ -22,7 +22,7 @@ export default class Broadcast extends React.Component{
                     volume:element.volume,
                     on:element.on
                }) 
-            });
+               ));
         });
         
     }

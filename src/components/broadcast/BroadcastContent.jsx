@@ -67,7 +67,7 @@ export default class Broadcast extends React.Component{
         .then(res=>res.json())
         .then(data=>{
             console.log(data);
-            data.map((element,index)=> {
+            data.map((element,index)=> (
                newlist.push({
                 key:index,
                 programId:element.programId,
@@ -78,7 +78,7 @@ export default class Broadcast extends React.Component{
                 ftpUrl:element.ftpUrl,
                 createdAt:element.createdAt.substring(0,10),
                }) 
-            });
+               ));
             this.setState({
               list:newlist
             })

@@ -1,3 +1,4 @@
+
 import React from 'react'
 import api from '../../api/index'
 import { Table,DatePicker, Space } from 'antd'
@@ -96,17 +97,17 @@ function getData(weatherList){
         taArr=[];
         uaArr=[];
         paArr=[];
-        weatherList.map((item)=>{
-            taArr.push(item['ta']);
-            uaArr.push(item['ua']);
-            paArr.push(item['pa']);
+        weatherList.map(item=>{
+            taArr.push(item['ta'])
+            uaArr.push(item['ua'])
+            paArr.push(item['pa'])
         })
         // console.log(taArr);
         maxTa=Math.max(...taArr);
         miniTa=Math.min(...taArr);
-        if (taArr.length!==0) {
+        if (taArr.length!=0) { //eslint-disable-line
             avgTa=taArr.reduce((num,item,index)=>{
-                if(index !=taArr.length-1){
+                if(index !=taArr.length-1){  //eslint-disable-line
                     return (num+item)
                 }else{
                     return (num+item)/taArr.length
@@ -116,9 +117,9 @@ function getData(weatherList){
         
         maxUa=Math.max(...uaArr);
         miniUa=Math.min(...uaArr);
-        if (uaArr.length!==0) {
+        if (uaArr.length!=0) {  //eslint-disable-line
             avgUa=uaArr.reduce((num,item,index)=>{
-                if(index !=uaArr.length-1){
+                if(index !=uaArr.length-1){  //eslint-disable-line
                     return (num+item)
                 }else{
                     return (num+item)/uaArr.length
@@ -127,9 +128,9 @@ function getData(weatherList){
         }
         maxPa=Math.max(...paArr);
         miniPa=Math.min(...paArr);
-        if(paArr.length!==0){
+        if(paArr.length!=0){ //eslint-disable-line
             avgPa=paArr.reduce((num,item,index)=>{
-                if(index !=paArr.length-1){
+                if(index !=paArr.length-1){  //eslint-disable-line
                     return (num+item)
                 }else{
                     return (num+item)/paArr.length
@@ -225,23 +226,22 @@ function getData(weatherList){
             api.getWeather()
             .then(res=>res.json())
             .then(data=>{
-                // console.log(data);
-                data.map((element,index)=>{
-                    
-                    list.push({
-                        key:index,
-                        createdAt:element.createdAt.substring(0,10),
-                        dn:element.dn,
-                        dm:element.dm,
-                        dx:element.dx,
-                        sn:element.sn,
-                        sm:element.sm,
-                        sx:element.sx,
-                        ta:element.ta,
-                        ua:element.ua,
-                        pa:element.pa/10
-                    })
-                })   
+                console.log(data);
+                data.map((element,index)=>(
+                        list.push({
+                            key:index,
+                            createdAt:element.createdAt.substring(0,10),
+                            dn:element.dn,
+                            dm:element.dm,
+                            dx:element.dx,
+                            sn:element.sn,
+                            sm:element.sm,
+                            sx:element.sx,
+                            ta:element.ta,
+                            ua:element.ua,
+                            pa:element.pa
+                        })       
+                ))    
             })
     
         }
@@ -250,28 +250,32 @@ function getData(weatherList){
             let {date2} =this.state;
             // 先清空，然后在往里面添加
             weatherList=[]
-            list.map((item,index)=>{
-                // console.log(date1+"/"+item.createdAt+"/"+date2);                 
-                // console.log(date1<item.createdAt&&item.createdAt<date2);
-                // let a = parseInt(item.createdAt.replace("-","").replace("-","")) 
-                if (date1<=item.createdAt&&item.createdAt<=date2) {
-                    
-                    weatherList.push({
-                        key:index,
-                        createdAt:item.createdAt,
-                        dn:item.dn,
-                        dm:item.dm,
-                        dx:item.dx,
-                        sn:item.sn,
-                        sm:item.sm,
-                        sx:item.sx,
-                        ta:item.ta,
-                        ua:item.ua,
-                        pa:item.pa
-                    })
-                }
-            })
-           getData(weatherList)
+            
+                list.map((item,index)=>{
+                    // console.log(date1+"/"+item.createdAt+"/"+date2);                 
+                    // console.log(date1<item.createdAt&&item.createdAt<date2);
+                    // let a = parseInt(item.createdAt.replace("-","").replace("-","")) 
+                    if (date1<=item.createdAt&&item.createdAt<=date2) {
+                        
+                        weatherList.push({
+                            key:index,
+                            createdAt:item.createdAt,
+                            dn:item.dn,
+                            dm:item.dm,
+                            dx:item.dx,
+                            sn:item.sn,
+                            sm:item.sm,
+                            sx:item.sx,
+                            ta:item.ta,
+                            ua:item.ua,
+                            pa:item.pa
+                        })
+                    }
+                })
+                getData(weatherList)
+            
+            
+           
         // console.log(date1);
         // console.log(list);
             // 这个是我之前换的方法
@@ -305,7 +309,7 @@ function getData(weatherList){
                         />
                     </Space>,
 
-                    <Button onClick={this.showModal}>查看</Button>
+                    <Button onClick={this.showModal} disabled={date1.length!==0&&date2.length!==0?false:true}>查看</Button>
                     <Modal
                     title={
                         <div

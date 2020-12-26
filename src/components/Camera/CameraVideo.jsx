@@ -181,41 +181,41 @@ export default class CameraVideo extends React.Component{
                     <p style={{fontSize:"30px",textAlign:"center"}}>云台</p>
                     <hr/>
                         <div className="1" style={{float:"left"}}>
-                            <img src={img1} 
+                            <img src={img1} alt=""
                             onClick={()=>{api.postCameraPtz({"command":25,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img2}
+                            <img src={img2} alt=""
                             onClick={()=>{api.postCameraPtz({"command":21,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img3}
+                            <img src={img3} alt=""
                             onClick={()=>{api.postCameraPtz({"command":26,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
                             <br/>
-                            <img src={img4}
+                            <img src={img4} alt=""
                             onClick={()=>{api.postCameraPtz({"command":23,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img5}
+                            <img src={img5} alt=""
                             onClick={()=>{api.postCameraPtz({"command":29,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img6}
+                            <img src={img6} alt=""
                             onClick={()=>{api.postCameraPtz({"command":24,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
                             <br/>
-                            <img src={img7}
+                            <img src={img7} alt=""
                             onClick={()=>{api.postCameraPtz({"command":27,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img8}
+                            <img src={img8} alt=""
                             onClick={()=>{api.postCameraPtz({"command":22,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img9}
+                            <img src={img9} alt=""
                             onClick={()=>{api.postCameraPtz({"command":28,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
                         </div>
                         <div className="2" style={{float:"left"}}>
-                            <img src={img10}
+                            <img src={img10} alt=""
                             onClick={()=>{api.postCameraPtz({"command":11,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img11}
+                            <img src={img11} alt=""
                             onClick={()=>{api.postCameraPtz({"command":12,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
                             <br/>
-                            <img src={img12}
+                            <img src={img12} alt=""
                             onClick={()=>{api.postCameraPtz({"command":13,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img13}
+                            <img src={img13} alt=""
                             onClick={()=>{api.postCameraPtz({"command":14,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
                             <br/>
-                            <img src={img14}
+                            <img src={img14} alt=""
                             onClick={()=>{api.postCameraPtz({"command":15,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img15}
+                            <img src={img15} alt=""
                             onClick={()=>{api.postCameraPtz({"command":16,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
 
                         </div>

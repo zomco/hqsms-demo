@@ -17,21 +17,19 @@ rules: [{ type: 'array', required: true, message: 'Please select time!' }],
 
 // 开始结束时间
 let date1="";
-let date2="";
+
 
 let name="";
 let leixing;
-let xiangqing;
+
 let startTime;
 let repeatTime;
-let length;
+
 let playMode;
 let termIds=[];
 let programId=[];
 let enable;
-let endDate;
-let vol;
-let status;
+
 
 let value1 ="";
 let value2 ="";
@@ -102,7 +100,8 @@ export default class BroadcastTask extends React.Component{
        api.getBroadcastTaskContent()
        .then(res=>res.json())
        .then(data=>{
-           data.map((item,index)=>{
+           console.log(data);
+           data.map((item,index)=>(
            newList.push({
                key:index,
                broadcastId:item.broadcastId,
@@ -115,10 +114,11 @@ export default class BroadcastTask extends React.Component{
                taskVol:item.taskVol,
                startTime:item.startTime
            })
-       })
+           ))
        this.setState({
         list:newList
         })
+       
     })
        
 
@@ -141,7 +141,7 @@ export default class BroadcastTask extends React.Component{
     // 获取日期值
     dateChange=(data,dateStrings)=>{
             date1=dateStrings[0];
-            date2=dateStrings[1]
+            // date2=dateStrings[1]
     }
 
 
@@ -303,41 +303,17 @@ export default class BroadcastTask extends React.Component{
           
             const onCreate = values => {
                 console.log('Received values of form: ', values);
-                // let a=[];
-                // let xq=[];
-                // if (values.xiangqing.length>=2) {
-                //     values.xiangqing.map(item=>{
-                //         xq.push(parseInt(item))
-                //     })
-                // }
-                // a.push(parseInt(values.termIds));
-                //   this.setState({
-                //     name:values.name,
-                //     leixing:parseInt(values.leixing),
-                //     xiangqing:values.xiangqing,
-                //     startTime:date1,
-                //     repeatTime:values.repeatTime,
-                //     length:values.length,
-                //     playMode:values.playMode,
-                //     termIds:a,
-                //     programId:values.programId,
-                //     enable:values.enable,
-                //     endData:date2,
-                //     vol:values.vol,
-                //     status:values.status
-                // })
-                // console.log(this.state.termIds);
                 termIds.push(parseInt(values.termIds));
                 name=values.name;
                 leixing=parseInt(values.type.leixing);
-                xiangqing=parseInt(values.xiangqing);
+                // xiangqing=parseInt(values.xiangqing);
                 startTime=date1;
                 repeatTime=parseInt(values.repeatTimes);
-                length=parseInt(values.length);
+                // length=parseInt(values.length);
                 playMode=parseInt(values.playMode);
                 programId.push(parseInt(values.proramIds));
                 enable=parseInt(values.enable);
-                endDate=date2;
+                // endDate=date2;
                 setVisible(false);
                 
 
