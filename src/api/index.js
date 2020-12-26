@@ -56,6 +56,10 @@ const api={
     // 计划内容
     getBroadcastTaskContent(){
         return httpGet(base.ownUrl+base.BroadcastTaskContent)
-    }
+    },
+    // 屏幕的设备信息
+    getScreen(){
+        return httpGet(base.ownUrl1+base.Screen)
+    },
 }
 export default api

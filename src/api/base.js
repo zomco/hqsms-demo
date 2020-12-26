@@ -1,5 +1,7 @@
 const base={
     ownUrl:"http://47.115.144.65/api",
+    ownUrl1:"http://192.168.1.20:8080/api",
+
 
     CameraHuman:"/camera-humans",
     renlian:"/camera-humans/feature",
@@ -18,7 +20,7 @@ const base={
     BroadcastTask:"/broadcast/task/create",
     BroadcastTaskContent:"/broadcast/task",
 
-    Screen:"/screen"
+    Screen:"/screens/1",
 
 
   }
