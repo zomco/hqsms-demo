@@ -56,6 +56,32 @@ const api={
     // 计划内容
     getBroadcastTaskContent(){
         return httpGet(base.ownUrl+base.BroadcastTaskContent)
+    },
+    // 屏幕的设备信息
+    getScreen(){
+        return httpGet(base.ownUrl+base.Screen)
+    },
+    // 获取屏幕信息
+    getScreenContents(){
+        return httpGet(base.ownUrl+base.ScreenContents)
+    },
+    // 删除屏幕节目
+    getScreenDelete(){
+        return httpGet(base.ownUrl+base.ScreenDelete)
+    },
+    // 获取无线网列表
+    getWifis(){
+        return httpGet(base.ownUrl+base.Wifi)
+    },
+    // 获取无线网数据列表
+    getWifiLogs(){
+        return httpGet(base.ownUrl+base.wifiLogs)
+    },
+    getAlams(){
+        return httpGet(base.ownUrl+base.Alarm)
+    },
+    getAlarmLogs(){
+        return httpGet(base.ownUrl+base.alarmLogs)
     }
 }
 export default api

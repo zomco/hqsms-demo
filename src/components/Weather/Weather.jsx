@@ -1,11 +1,9 @@
-
 import React from 'react'
 import api from '../../api/index'
-import { Table,DatePicker, Space } from 'antd'
+import { Table,DatePicker, Space,Modal, Button,Spin } from 'antd'
 import moment from 'moment'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
-import { Modal, Button } from 'antd';
 import Draggable from 'react-draggable';
 
     const { RangePicker } = DatePicker
@@ -157,6 +155,7 @@ function getData(weatherList){
                 data:[],
                 visible: false,
                 disabled: true,
+                isLoading:true
             }
             this.dateChange=this.dateChange.bind(this)
         }
@@ -241,13 +240,17 @@ function getData(weatherList){
                             ua:element.ua,
                             pa:element.pa
                         })       
-                ))    
+                ))  
+                this.setState({
+                    isLoading:false
+                })  
             })
     
         }
         render(){
             let {date1} =this.state;
             let {date2} =this.state;
+            let {isLoading} = this.state;
             // 先清空，然后在往里面添加
             weatherList=[]
             
@@ -273,85 +276,81 @@ function getData(weatherList){
                     }
                 })
                 getData(weatherList)
-            
-            
-           
-        // console.log(date1);
-        // console.log(list);
-            // 这个是我之前换的方法
-            // let a=list.find(item=>date1<=item.createdAt&&item.createdAt<=date2)
-            // console.log(a);
-            // let a=list.find(item=>item.createdAt==="2020-12-03")
-            
-            return(
-                <div>
-                    <h1>气象传感器</h1>
-                    <span><h4 style={{display:"inline"}}>请选择时间：</h4></span>
-                    <Space direction="vertical" size={12}>
-                        <RangePicker
-                        locale={locale} size="large" 
-                        onChange={this.dateChange}
-                        defaultValue={moment()}
-                        format={dateFormat}
-                        disabledDate={disabledDate}
-                        dateRender={current => {
-                            const style = {};
-                            if (current.date() === 1) {
-                            style.border = '1px solid #1890ff';
-                            style.borderRadius = '50%';
-                            }
-                            return (
-                            <div className="ant-picker-cell-inner" style={style}>
-                                {current.date()}
+            if (isLoading) {
+                return(<Spin style={{padding:"30% 50%"}} size="large" />)
+            }else{
+                return(
+                    <div>
+                        <h1>气象传感器</h1>
+                        <span><h4 style={{display:"inline"}}>请选择时间：</h4></span>
+                        <Space direction="vertical" size={12}>
+                            <RangePicker
+                            locale={locale} size="large" 
+                            onChange={this.dateChange}
+                            defaultValue={moment()}
+                            format={dateFormat}
+                            disabledDate={disabledDate}
+                            dateRender={current => {
+                                const style = {};
+                                if (current.date() === 1) {
+                                style.border = '1px solid #1890ff';
+                                style.borderRadius = '50%';
+                                }
+                                return (
+                                <div className="ant-picker-cell-inner" style={style}>
+                                    {current.date()}
+                                </div>
+                                );
+                            }}
+                            />
+                        </Space>,
+    
+                        <Button onClick={this.showModal} disabled={date1.length!==0&&date2.length!==0?false:true}>查看</Button>
+                        <Modal
+                        title={
+                            <div
+                            style={{
+                                width: '100%',
+                                cursor: 'move',
+                            }}
+                            onMouseOver={() => {
+                                if (this.state.disabled) {
+                                this.setState({
+                                    disabled: false,
+                                });
+                                }
+                            }}
+                            onMouseOut={() => {
+                                this.setState({
+                                disabled: true,
+                                });
+                            }}
+                            // fix eslintjsx-a11y/mouse-events-have-key-events
+                            // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/mouse-events-have-key-events.md
+                            onFocus={() => {}}
+                            onBlur={() => {}}
+                            // end
+                            >
+                            <h5>{date1}-----{date2}</h5>
                             </div>
-                            );
-                        }}
-                        />
-                    </Space>,
-
-                    <Button onClick={this.showModal} disabled={date1.length!==0&&date2.length!==0?false:true}>查看</Button>
-                    <Modal
-                    title={
-                        <div
-                        style={{
-                            width: '100%',
-                            cursor: 'move',
-                        }}
-                        onMouseOver={() => {
-                            if (this.state.disabled) {
-                            this.setState({
-                                disabled: false,
-                            });
                             }
-                        }}
-                        onMouseOut={() => {
-                            this.setState({
-                            disabled: true,
-                            });
-                        }}
-                        // fix eslintjsx-a11y/mouse-events-have-key-events
-                        // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/mouse-events-have-key-events.md
-                        onFocus={() => {}}
-                        onBlur={() => {}}
-                        // end
-                        >
-                        <h5>{date1}-----{date2}</h5>
-                        </div>
-                        }
-                        visible={this.state.visible}
-                        onOk={this.handleOk}
-                        onCancel={this.handleCancel}
-                        modalRender={modal => <Draggable disabled={this.state.disabled}>{modal}</Draggable> }
-                        >
+                            visible={this.state.visible}
+                            onOk={this.handleOk}
+                            onCancel={this.handleCancel}
+                            modalRender={modal => <Draggable disabled={this.state.disabled}>{modal}</Draggable> }
+                            >
+                            
+                            <Table size="small" center columns={columns2} dataSource={this.state.data}/>
+                            </Modal>
+                        <br/>
+                        <br/>
                         
-                        <Table size="small" center columns={columns2} dataSource={this.state.data}/>
-                        </Modal>
-                    <br/>
-                    <br/>
-                    
-                    <Table size="middle" center columns={columns} onChange={tableChange} dataSource={list}/>
-                    
-            </div>
-            )
+                        <Table size="middle" center columns={columns} onChange={tableChange} dataSource={list}/>
+                        
+                </div>
+                )
+            }
+            
+            
         }
     }
