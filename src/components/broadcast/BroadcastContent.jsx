@@ -101,7 +101,7 @@ export default class Broadcast extends React.Component{
      // 实时播放弹窗
      getUrl = {
       name: 'file',
-      action: 'http://127.0.0.1:8080/broadcast/content/upload',
+      action: 'http://192.168.1.20:8080/api/broadcast-contents/upload',
       headers: {
         authorization: 'authorization-text'
       },
@@ -127,7 +127,9 @@ export default class Broadcast extends React.Component{
       this.setState({
         isModalVisible:false
       });
-      api.postBroadcastCreateSession({"termIds":[2]})
+      api.postBroadcastCreateSession({
+        "termIds":[2]
+      })
       .then(res=>res.json())
       .then(data=>{
         console.log(data.sessionId);

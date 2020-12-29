@@ -1,56 +1,61 @@
 import React from 'react'
 import api from '../../api'
-
-let info = []
+import {Card,Spin} from 'antd'
 export default class Broadcast extends React.Component{
-    componentWillMount(){
-        info=[];
+    state={
+        code:"",
+        model:"",
+        name:"",
+        supplier:"",
+        productBatch:"",
+        createdAt:"",
+        purchaseAt:"",
+        ip:"",
+        volume:"",
+        on:"",
+        isLoading:true
+    }
+    componentDidMount(){
         api.getBroadcast()
         .then(res=>res.json())
         .then(data=>{
             console.log(data);
-            data.map(element => (
-               info.push({
-                    code:element.code,
-                    model:element.model,
-                    name:element.name,
-                    supplier:element.supplier,
-                    productBatch:element.productBatch,
-                    createdAt:element.createdAt.substring(0,10),
-                    purchaseAt:element.purchaseAt,
-                    ip:element.ip,
-                    volume:element.volume,
-                    on:element.on
-               }) 
-               ));
+            this.setState({
+                code:data[0].code,
+                model:data[0].model,
+                name:data[0].name,
+                supplier:data[0].supplier,
+                productBatch:data[0].productBatch,
+                createdAt:data[0].createdAt.substring(0,10),
+                purchaseAt:data[0].purchasedAt.substring(0,10),
+                ip:data[0].ip,
+                volume:data[0].volume,
+                on:data[0].isOn,
+                isLoading:false
+            })
         });
         
     }
     render(){
-        console.log(info);     
-    return (
-        <div>
-            <h5>广播设备信息:</h5>
-           
-            {info.map((item,index)=>{
-               return   <ul style={{fontSize:"16px"}}>
-                            <li key={index}>设备编码：{item.code}</li>
-                            <li key={index}>设备型号:{item.model}</li>
-                            <li key={index}>设备名称:{item.name}</li>
-                            <li key={index}>供应商:{item.supplier}</li>
-                            <li key={index}>生产批次:{item.productBatch}</li>
-                            <li key={index}>安装时间:{item.createdAt}</li>
-                            <li key={index}>采购日期:{item.purchaseAt}</li>
-                            <li key={index}>IP地  址:{item.ip}</li>
-                            <li key={index}>音    量:{item.volume}</li>
-                            <li key={index}>运行状态:{item.on===true ? "打开":"关闭"}</li>
-                         </ul>
-                        
-                      
-            })}
+        if (this.state.isLoading) {
+            return(<Spin size="large" style={{padding:"30% 50%"}} />)
+        }
+        else {
+            return (
+                <Card title="设备信息" bordered={false} style={{ width: 300 }}>
+                            <p>设备编码:{this.state.code}</p>
+                            <p>设备型号:{this.state.model}</p>
+                            <p>设备名称:{this.state.name}</p>
+                            <p>供 应 商:{this.state.supplier}</p>
+                            <p>生产批次:{this.state.productBatch}</p>
+                            <p>安装时间:{this.state.createdAt}</p>
+                            <p>采购日期:{this.state.purchaseAt}</p>
+                            <p>IP地  址:{this.state.ip}</p>
+                            <p>音    量:{this.state.volume}</p>
+                            <p>运行状态:{this.state.on==="ON"?"打开":"关闭"}</p>
+                </Card>
+                )
+        }
 
-            
-        </div>
-        )
     }
 }

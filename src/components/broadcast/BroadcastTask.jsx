@@ -2,8 +2,10 @@ import React,{useState} from 'react'
 import moment from 'moment'
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
-import { Button,Modal,Form,Input,Table,Select,Radio,DatePicker,Slider} from 'antd';
+import { Button,Modal,Form,Input,Table,Select,Radio,DatePicker,Slider,Checkbox,Alert} from 'antd';
 import api from '../../api'
+import { values } from 'mobx';
+// import Checkbox from 'antd/lib/checkbox/Checkbox';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -20,7 +22,11 @@ let date1="";
 
 
 let name="";
-let leixing;
+let type;
+let every;
+let daysInWeek=[];
+let monthsInYear=[];
+let dayInMonth=[];
 
 let startTime;
 let repeatTime;
@@ -33,8 +39,7 @@ let enable;
 
 let value1 ="";
 let value2 ="";
-let judge1=false;
-let judge2=false;
+
 export default class BroadcastTask extends React.Component{
     constructor(){
         super();
@@ -78,22 +83,16 @@ export default class BroadcastTask extends React.Component{
         ]
 
         this.state={
-            list:[]
+            list:[],
+            isVisible:false,
+            isVisibleDay:false,
+            isVisibleWeek:false,
+            isVisibleMonth:false,
+            alert:'none'
             }
 
     }
     
-       onChange1 = (e) => {
-            e.preventDefault();
-            value1=e.target.value
-            judge2=true
-        }
-
-       onChange2 = (e) => {
-            e.preventDefault();
-            value2=e.target.value
-            judge1=true
-       }
    
     componentDidMount(){
        let newList=[];
@@ -166,7 +165,16 @@ export default class BroadcastTask extends React.Component{
         onCancel,
         }) => {
         const [form] = Form.useForm();
+        const [form1] = Form.useForm();
+        const [formd] = Form.useForm();
+        const [formw] = Form.useForm();
+        const [formm] = Form.useForm();
+
+
+
+
             return (
+            <>
               <Modal
                 visible={visible}
                 title="创建广播任务"
@@ -179,24 +187,21 @@ export default class BroadcastTask extends React.Component{
                     .then(values => {
                       form.resetFields();
                       onCreate(values);
-
-                    //   发送创建计划请求
-                      api.postBroadcastTask({
-                        "taskName":name,
-                        "type":leixing,
-                        "startTime":startTime,
-                        "playMode" :playMode,
-                        "repeatTime":repeatTime,
-                        "termIds" : termIds,
-                        "programIds":programId,
-                        "enable" : enable
-                      })
-                      .then(res=>res.json())
-                      .then(data=>console.log(data))
+                      termIds.push(parseInt(values.termIds));
+                      name=values.name;
+                      startTime=date1;
+                      repeatTime=parseInt(values.repeatTimes);
+                      playMode=parseInt(values.playMode);
+                      programId.push(parseInt(values.proramIds));
+                      enable=parseInt(values.enable);
+                    
                     })
                     .catch(info => { 
                       console.log('Validate Failed:', info);
                     
+                    })
+                    this.setState({
+                        isVisible:true
                     })
                 }}
               >
@@ -231,38 +236,11 @@ export default class BroadcastTask extends React.Component{
                     name="repeatTimes"
                     label="重复次数"
                     >
-                    <Input id="input1" onChange={this.onChange1} value={value1} disabled={judge1} />
-                    </Form.Item>
-                    <Form.Item
-                    name="length"
-                    label="任务时长"
-                    >
-                    <Input id="input2" onChange={this.onChange2} value={value2} disabled={judge2}/>
+                    <Input id="input1" onChange={this.onChange1} value={value1}/>
                     </Form.Item>
 
                     <Form.Item name="range-time-picker" label="起止时间" {...layout} onFinish={this.onFinish} {...rangeConfig}>
                         <RangePicker locale={locale} disabledDate={this.disabledDate} onChange={this.dateChange} showTime format="YYYY-MM-DD HH:mm:ss" />
-                    </Form.Item>
-
-                    <Form.Item label="任务类型" rules={[{ required: true}]}>
-                    <Input.Group compact>
-                    <Form.Item
-                        name={['type', 'leixing']}
-                        rules={[{ required: true, message: '请选择任务类型' }]}
-                    >
-                        <Select placeholder="类型">
-                        <Option value="1">日任务</Option>
-                        <Option value="2">周任务</Option>
-                        <Option value="3">月任务</Option>
-                        <Option value="4">一次性任务</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        name={['type', 'xiangqing']}
-                    >
-                        <Input style={{ width: '80%' }} placeholder="请输入详细时间" />
-                    </Form.Item>
-                    </Input.Group>
                     </Form.Item>
 
                     <Form.Item name="vol" label="音  量">
@@ -295,27 +273,238 @@ export default class BroadcastTask extends React.Component{
                     </Form.Item>
                 </Form>
               </Modal>
+              <Modal visible={this.state.isVisible} title="任务类型" okText="确认" cancelText="取消" 
+                onOk={()=>{
+                    form1
+                        .validateFields()
+                        .then(values => {
+                        form1.resetFields();
+                        console.log(values);
+                        type=parseInt(values.radio)
+                        // 判断任务类型
+                        if (values.radio==="1") {
+                            this.setState({
+                                isVisibleDay:true,
+                                isVisible:false
+                            })
+                        }else if(values.radio==="2"){
+                            this.setState({
+                                isVisibleWeek:true,
+                                isVisible:false
+                            })
+                        }else if(values.radio==="3"){
+                            this.setState({
+                                isVisibleMonth:true,
+                                isVisible:false
+                            })
+                        }else if(values.radio==="4"){
+                            // 发送一次性任务
+                            api.postBroadcastTask({
+                                "taskName":name,
+                                "type":type,
+                                "startTime":startTime,
+                                "playMode" :playMode,
+                                "repeatTime":repeatTime,
+                                "termIds" : termIds,
+                                "programIds":programId,
+                                "enable" : enable,
+                            }).then(this.setState({alert:'block'}))
+                            this.setState({isVisible:false})
+                        }else{
+                            alert("输入失败")
+                        }
+                        onCreate(values);
+                        })
+                        .catch(info => { 
+                            console.log('Validate Failed:', info);
+                          })
+                }}>
+                <Form form={form1}>
+                    <Form.Item name="radio" label="请选择">
+                        <Radio.Group>
+                        <Radio value="1">日任务</Radio>
+                        <Radio value="2">周任务</Radio>
+                        <Radio value="3">月任务</Radio>
+                        <Radio value="4">一次性任务</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+                </Form>
+                </Modal>
+             <Modal visible={this.state.isVisibleDay} titie="具体时间" okText="确认" cancelText="取消" onCancel={() => {this.setState({isVisibleDay:false})}}
+               onOk={() => {
+                this.setState({isVisibleDay:false})
+                formd
+                  .validateFields()
+                  .then(values => {
+                    formd.resetFields();
+                    onCreate(values);
+                    
+                    //   发送日计划请求
+                    api.postBroadcastTask({
+                        "taskName":name,
+                        "type":type,
+                        "startTime":startTime,
+                        "playMode" :playMode,
+                        "repeatTime":repeatTime,
+                        "termIds" : termIds,
+                        "programIds":programId,
+                        "enable" : enable,
+                        "every":every
+                    })
+                    .then(res=>res.json())
+                  })
+                  .catch(info => { 
+                    console.log('Validate Failed:', info);
+                  })
+                
+              }}>
+                  <Form form={formd} style={{marginTop:"100px"}}>
+                  <Form.Item
+                    label="第几天"
+                    name="every"
+                    rules={[{ required: true, message: '请输入第几天!' }]}
+                  >
+                    <Input style={{ width:"80px"}}/>
+                </Form.Item>
+                </Form>
+              </Modal>
+              <Modal visible={this.state.isVisibleWeek} titie="具体时间" okText="确认" cancelText="取消" onCancel={() => {this.setState({isVisibleDay:false})}}
+                    onOk={() => {
+                        this.setState({isVisibleWeek:false})
+                        formw
+                          .validateFields()
+                          .then(values => {
+                              console.log(values.weeks);
+                            values.weeks.map(item=>(
+                                daysInWeek.push(parseInt(item))
+                                ))
+                            console.log(daysInWeek);
+                            formw.resetFields();
+                            onCreate(values);
+
+                            //   发送周计划请求
+                            api.postBroadcastTask({
+                                "taskName":name,
+                                "type":type,
+                                "startTime":startTime,
+                                "playMode" :playMode,
+                                "repeatTime":repeatTime,
+                                "termIds" : termIds,
+                                "programIds":programId,
+                                "enable" : enable,
+                                "every":every,
+                                "daysInWeek":daysInWeek
+                            })
+                            .then(res=>res.json())
+                          })
+                          .catch(info => { 
+                            console.log('Validate Failed:', info);
+                          })
+                        
+                      }}
+              >
+                  <Form form={formw}>
+                    <Form.Item
+                        label="第几周"
+                        name="every"
+                        rules={[{ required: true, message: '请输入第几周!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="weeks" label="请选择">
+                        <Checkbox.Group>
+                            <Checkbox value="1">星期一</Checkbox>
+                            <Checkbox value="2">星期二</Checkbox>
+                            <Checkbox value="3">星期三</Checkbox>
+                            <Checkbox value="4">星期四</Checkbox>
+                            <br />
+                            <Checkbox value="5">星期五</Checkbox>
+                            <Checkbox value="6">星期六</Checkbox>
+                            <Checkbox value="7">星期日</Checkbox>
+                        </Checkbox.Group>
+                    </Form.Item>
+                
+                  </Form>
+              </Modal>
+                {/* 月任务 */}
+              <Modal visible={this.state.isVisibleMonth} titie="具体时间" okText="确认" cancelText="取消" onCancel={() => {this.setState({isVisibleMonth:false})}}
+                    onOk={() => {
+                        this.setState({isVisibleMonth:false})
+                        formm
+                          .validateFields()
+                          .then(values => {
+                              console.log(values.month);
+                            values.month.map(item=>(
+                                monthsInYear.push(parseInt(item))
+                                ))
+                            
+                            dayInMonth.push(parseInt(values.day))
+                               
+                            console.log(monthsInYear);
+                            formm.resetFields();
+                            onCreate(values);
+
+                            //   发送月计划请求
+                            api.postBroadcastTask({
+                                "taskName":name,
+                                "type":type,
+                                "startTime":startTime,
+                                "playMode" :playMode,
+                                "repeatTime":repeatTime,
+                                "termIds" : termIds,
+                                "programIds":programId,
+                                "enable" : enable,
+                                "every":every,
+                                "monthsInYear":monthsInYear,
+                                "dayInMonth":dayInMonth
+                            })
+                            .then(res=>res.json())
+                          })
+                          .catch(info => { 
+                            console.log('Validate Failed:', info);
+                          })
+                        
+                      }}
+              >
+                  <Form form={formm}>
+                    <Form.Item name="month" label="请选择">
+                        <Checkbox.Group>
+                            <Checkbox value="1">一月</Checkbox>
+                            <Checkbox value="2">二月</Checkbox>
+                            <Checkbox value="3">三月</Checkbox>
+                            <Checkbox value="4">四月</Checkbox>
+                            <Checkbox value="5">五月</Checkbox>
+                            <Checkbox value="6">六月</Checkbox>
+                            <br/>
+                            <Checkbox value="7">七月</Checkbox>
+                            <Checkbox value="2">八月</Checkbox>
+                            <Checkbox value="3">九月</Checkbox>
+                            <Checkbox value="4">十月</Checkbox>
+                            <Checkbox value="5">十一月</Checkbox>
+                            <Checkbox value="6">十二月</Checkbox>
+                        </Checkbox.Group>
+                    </Form.Item>
+                    <Form.Item
+                        label="第几天"
+                        name="day"
+                        rules={[{ required: true, message: '请输入第几天!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                  </Form>
+              </Modal>
+            </>
             );
           };
         
         const CollectionsPage = () => {
             const [visible, setVisible] = useState(false);
-          
-            const onCreate = values => {
+            const onCreate = (values) => {
                 console.log('Received values of form: ', values);
-                termIds.push(parseInt(values.termIds));
-                name=values.name;
-                leixing=parseInt(values.type.leixing);
-                // xiangqing=parseInt(values.xiangqing);
-                startTime=date1;
-                repeatTime=parseInt(values.repeatTimes);
-                // length=parseInt(values.length);
-                playMode=parseInt(values.playMode);
-                programId.push(parseInt(values.proramIds));
-                enable=parseInt(values.enable);
-                // endDate=date2;
-                setVisible(false);
+                every=parseInt(values.every);
                 
+                
+                setVisible(false); 
 
             };
   
@@ -341,10 +530,17 @@ export default class BroadcastTask extends React.Component{
         };
     return (
         <div>
+            <Alert style={{display:this.state.alert}}
+                message="发送成功"
+                type="success"
+                showIcon
+                closable
+                />
             <h5>广播定时任务:</h5>
             <CollectionsPage />
             <br/>
             <Table columns={this.columns} dataSource={this.state.list}></Table>
+            
         </div>
         )
     }

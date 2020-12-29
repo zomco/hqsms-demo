@@ -13,14 +13,22 @@ const base={
     Weather:"/weather/1/log",
 
     Broadcast:"/broadcast",
-    BroadcastContent:"/broadcast/content",
-    BroadcastCreateSession:"/broadcast/content/createSession",
-    BroadcastSetandPlay:"/broadcast/content/setAndPlay",
-    BroadcastDelete:"/broadcast/content/delete",
-    BroadcastTask:"/broadcast/task/create",
-    BroadcastTaskContent:"/broadcast/task",
+    BroadcastContent:"/broadcast-contents",
+    BroadcastCreateSession:"/broadcast-contents/createSession",
+    BroadcastSetandPlay:"/broadcast-contents/setAndPlay",
+    BroadcastDelete:"/broadcast-contents/",
+    BroadcastTask:"/broadcast-tasks/add",
+    BroadcastTaskContent:"/broadcast-tasks",
 
     Screen:"/screens/1",
+    ScreenContents:"/screen-contents/",
+    ScreenDelete:"/screen-contents/program",
+
+    Wifi:"/wifis",
+    wifiLogs:"/wifi-logs",
+
+    Alarm:"/alarms",
+    alarmLogs:"/alarms-logs"
 
 
   }
