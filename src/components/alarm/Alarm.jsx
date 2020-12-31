@@ -23,19 +23,20 @@ export default class Alarm extends React.Component{
         api.getAlams()
         .then(res=>res.json())
         .then(data=>{
+            console.log(data);
             this.setState({
                 isLoading:false,
-                name:data[0].name,
-                id:data[0].id,
-                model:data[0].model,
-                supplier:data[0].supplier,
-                Mac:data[0].mac,
-                username:data[0].username,
-                password:data[0].password,
-                netmask:data[0].netmask,
-                gateway:data[0].gateway,
-                ip:data[0].ip,
-                isOn:data[0].isOn
+                name:data.content[0].name,
+                id:data.content[0].id,
+                model:data.content[0].model,
+                supplier:data.content[0].supplier,
+                Mac:data.content[0].mac,
+                username:data.content[0].username,
+                password:data.content[0].password,
+                netmask:data.content[0].netmask,
+                gateway:data.content[0].gateway,
+                ip:data.content[0].ip,
+                isOn:data.content[0].isOn
             })
             console.log(data)
         })

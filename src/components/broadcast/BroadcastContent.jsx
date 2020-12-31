@@ -57,7 +57,9 @@ export default class Broadcast extends React.Component{
       fileList: [],
       isModalVisible  : false,
       setIsModalVisible :false,
-      programId:0
+      programId:0,
+      sessionId:0,
+      isPalyModalVisible: false
     }
     
     }
@@ -67,7 +69,7 @@ export default class Broadcast extends React.Component{
         .then(res=>res.json())
         .then(data=>{
             console.log(data);
-            data.map((element,index)=> (
+            data.content.map((element,index)=> (
                newlist.push({
                 key:index,
                 programId:element.programId,
@@ -98,7 +100,7 @@ export default class Broadcast extends React.Component{
       .then(data=>console.log(data))
     };
    
-     // 实时播放弹窗
+     
      getUrl = {
       name: 'file',
       action: 'http://192.168.1.20:8080/api/broadcast-contents/upload',
@@ -121,7 +123,7 @@ export default class Broadcast extends React.Component{
       }
     }
     
-     // 提示实时播放弹窗
+    
     handleOk = () => {
       console.log(this.state.programId);
       this.setState({
@@ -134,9 +136,15 @@ export default class Broadcast extends React.Component{
       .then(data=>{
         console.log(data.sessionId);
         console.log(this.state.programId);
-        api.postBroadcastSetandPlay({"sessionId":data.sessionId,"programId":this.state.programId})
+        this.setState({
+          sessionId:data.sessionId
+        })
+        api.postBroadcastSetandPlay({"sessionId":this.state.sessionId,"programId":this.state.programId})
         .then(res=>res.json())
         .then(data=>console.log(data))
+        this.setState({
+          isPlayModalVisible:true
+        })
       })
     };
     handleCancel = () => {
@@ -144,6 +152,31 @@ export default class Broadcast extends React.Component{
           isModalVisible:false
         })
       };
+
+    handleOk1 =()=>{
+      this.setState({
+        isPlayModalVisible:false
+      })
+    };
+
+    handleCancel1 = () => {
+      this.setState({
+        isPalyModalVisible:false
+      })
+    };
+    // 停止
+    handleReturn=()=>{
+      api.postBroadcastSetStatus({"sessionId":this.state.sessionId,"status":0})
+    }
+    // 播放
+    handlePlay=()=>{
+      api.postBroadcastSetStatus({"sessionId":this.state.sessionId,"status":1})
+    }
+    // 暂停
+    handleStop=()=>{
+      api.postBroadcastSetStatus({"sessionId":this.state.sessionId,"status":2})
+    }
+
     render(){
    
     return (
@@ -152,7 +185,13 @@ export default class Broadcast extends React.Component{
             
              {/* 实时播放弹窗 */}
              <Modal width={300} title="上传成功！！" visible={this.state.isModalVisible} onOk={this.handleOk} onCancel={this.handleCancel}>
-              <p>请问是否实时播放？</p>
+              <p>是否实时播放？</p>
+            </Modal>
+            {/* 控制音频播放 */}
+            <Modal width={350} title="控制音频播放" visible={this.state.isPlayModalVisible} onOk={this.handleOk1} onCancel={this.handleCancel1}>
+              <Button type="primary" style={{marginRight:"30px"}} danger onClick={this.handleReturn}>停止</Button>
+              <Button type="primary" style={{marginRight:"30px"}} onClick={this.handlePlay}>播放</Button>
+              <Button type="primary" style={{marginRight:"30px"}} onClick={this.handleStop}>暂停</Button>
             </Modal>
             <h3>广播内容信息</h3>
             <Table size="middle" center columns={this.columns} dataSource={this.state.list}/>

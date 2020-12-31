@@ -139,9 +139,16 @@ function getData(weatherList){
         
 
     
-    function tableChange(pagination, filters,  extra) {
-        console.log('params', pagination, filters, extra);
-    }
+    // function tableChange(page,pagination, filters,  extra) {
+    //     console.log('params', pagination, filters, extra);
+    //     api.getCameraVehicle({page:page})
+    //     .then(res=>res.json())
+    //     .then(data=>{
+    //         this.setState({
+    //             data:data.content
+    //         })
+    //     })
+    // }
     //只能选择当前时间天数之前的时间
     const disabledDate = (current) => {
         return current > moment().startOf('day');
@@ -155,6 +162,8 @@ function getData(weatherList){
                 data:[],
                 visible: false,
                 disabled: true,
+                totalPages:1,
+                pageSize:0,
                 isLoading:true
             }
             this.dateChange=this.dateChange.bind(this)
@@ -177,21 +186,21 @@ function getData(weatherList){
                     key:'1',
                     name:'温度',
                     mini:miniTa,
-                    average:avgTa.toFixed(2),
+                    average:avgTa!=='undefined'?'无数据':avgTa.toFixed(2),
                     max:maxTa
                 },
                 {
                     key:'2',
                     name:'湿度',
                     mini:miniUa,
-                    average:avgUa.toFixed(2),
+                    average:avgUa!=='undefined'?'无数据':avgUa.toFixed(2),
                     max:maxUa
                 },
                 {
                     key:'3',
                     name:'气压',
                     mini:miniPa,
-                    average:avgPa.toFixed(2),
+                    average:avgPa!=='undefined'?'无数据':avgPa.toFixed(2),
                     max:maxPa
                 },
                 {
@@ -222,11 +231,12 @@ function getData(weatherList){
         
           componentDidMount(){
             list=[]
-            api.getWeather()
+            api.getWeather({page:0})
             .then(res=>res.json())
             .then(data=>{
                 console.log(data);
-                data.map((element,index)=>(
+                if (data!==null) {
+                    data.content.map((element,index)=>(
                         list.push({
                             key:index,
                             createdAt:element.createdAt.substring(0,10),
@@ -240,12 +250,32 @@ function getData(weatherList){
                             ua:element.ua,
                             pa:element.pa
                         })       
-                ))  
-                this.setState({
-                    isLoading:false
-                })  
+                    ))  
+                    this.setState({
+                        data:list,
+                        totalPages:data.totalPages,
+                        pageSize:data.size,
+                        isLoading:false
+                    })
+                }  else{
+                    this.setState({
+                        isLoading:false
+                    })
+                    alert('没有请求到数据')
+                }
             })
     
+        }
+
+        pageChange=(current)=>{
+            console.log(current);
+            api.getWeather({page:current.current})
+            .then(res=>res.json())
+            .then(data=>{
+                this.setState({
+                    data:data.content
+                })
+            })
         }
         render(){
             let {date1} =this.state;
@@ -282,7 +312,7 @@ function getData(weatherList){
                 return(
                     <div>
                         <h1>气象传感器</h1>
-                        <span><h4 style={{display:"inline"}}>请选择时间：</h4></span>
+                        {/* <span><h4 style={{display:"inline"}}>请选择时间：</h4></span>
                         <Space direction="vertical" size={12}>
                             <RangePicker
                             locale={locale} size="large" 
@@ -344,8 +374,16 @@ function getData(weatherList){
                             </Modal>
                         <br/>
                         <br/>
-                        
-                        <Table size="middle" center columns={columns} onChange={tableChange} dataSource={list}/>
+                         */}
+                        <Table size="middle" center columns={columns} onChange={this.pageChange} pagination={
+                        {
+                            total:this.state.totalPages,
+                            defaultCurrent:1,
+                            pageSize:this.state.pageSize,
+                            onShowSizeChange:true,
+                        }
+                       
+                    } dataSource={this.state.data}/>
                         
                 </div>
                 )

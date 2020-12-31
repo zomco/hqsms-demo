@@ -100,7 +100,7 @@ export default class BroadcastTask extends React.Component{
        .then(res=>res.json())
        .then(data=>{
            console.log(data);
-           data.map((item,index)=>(
+           data.content.map((item,index)=>(
            newList.push({
                key:index,
                broadcastId:item.broadcastId,

@@ -21,16 +21,16 @@ export default class Broadcast extends React.Component{
         .then(data=>{
             console.log(data);
             this.setState({
-                code:data[0].code,
-                model:data[0].model,
-                name:data[0].name,
-                supplier:data[0].supplier,
-                productBatch:data[0].productBatch,
-                createdAt:data[0].createdAt.substring(0,10),
-                purchaseAt:data[0].purchasedAt.substring(0,10),
-                ip:data[0].ip,
-                volume:data[0].volume,
-                on:data[0].isOn,
+                code:data.content[0].code,
+                model:data.content[0].model,
+                name:data.content[0].name,
+                supplier:data.content[0].supplier,
+                productBatch:data.content[0].productBatch,
+                createdAt:data.content[0].createdAt.substring(0,10),
+                purchaseAt:data.content[0].purchasedAt.substring(0,10),
+                ip:data.content[0].ip,
+                volume:data.content[0].volume,
+                on:data.content[0].isOn,
                 isLoading:false
             })
         });
