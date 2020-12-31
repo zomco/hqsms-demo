@@ -10,7 +10,7 @@ export default class AlarmContent extends React.Component{
             dataIndex:'id'
         },
         {
-            title:'WIFIId',
+            title:'报警器Id',
             dataIndex:'alarmId'
         },
         {
@@ -30,7 +30,7 @@ export default class AlarmContent extends React.Component{
         dataSourse:[],
     }
     componentDidMount(){
-        api.getWifiLogs()
+        api.getAlarmLogs()
         .then(res=>res.json())
         .then(data=>{
             let list=[]
@@ -42,7 +42,7 @@ export default class AlarmContent extends React.Component{
                         longitude:item.longitude,
                         latitude:item.latitude,
                         createdAt:item.createdAt,
-                        alarmId:item.wifiId
+                        alarmId:item.alarmId
                     })
                 ))
             }else{

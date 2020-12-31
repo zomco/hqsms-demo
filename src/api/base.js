@@ -10,25 +10,28 @@ const base={
     CameraPtz:"/cameras/1/ptz",
     CameraPlay:"/cameras/1/play",
 
-    Weather:"/weather/1/log",
+    Weather:"/weather-logs",
 
-    Broadcast:"/broadcast",
+    Broadcast:"/broadcasts",
     BroadcastContent:"/broadcast-contents",
     BroadcastCreateSession:"/broadcast-contents/createSession",
     BroadcastSetandPlay:"/broadcast-contents/setAndPlay",
+    BroadcastsetStatus:"/broadcast-contents/setStatus",
     BroadcastDelete:"/broadcast-contents/",
     BroadcastTask:"/broadcast-tasks/add",
     BroadcastTaskContent:"/broadcast-tasks",
 
     Screen:"/screens/1",
     ScreenContents:"/screen-contents/",
+    SreenPicUpload:"/screen-contents/picture",
+    SreenVideoUpload:"/screen-contents/video",
     ScreenDelete:"/screen-contents/program",
 
     Wifi:"/wifis",
     wifiLogs:"/wifi-logs",
 
     Alarm:"/alarms",
-    alarmLogs:"/alarms-logs"
+    alarmLogs:"/alarm-logs"
 
 
   }

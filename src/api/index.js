@@ -14,20 +14,20 @@ const api={
         return httpPost(base.ownUrl+base.CameraPtz,params)
     },
     // 人脸信息
-    getCameraHuman(){
-        return httpGet(base.ownUrl+base.CameraHuman)
+    getCameraHuman(params){
+        return httpGet(base.ownUrl+base.CameraHuman+'?page='+params.page+'&sort=createdAt,desc&size=33')
     },
     // 人脸搜索
     postRenlian(params){
         return httpPost(base.ownUrl+base.renlian,params)
     },
     // 车牌信息
-    getCameraVehicle(){
-        return httpGet(base.ownUrl+base.CameraVehicle)
+    getCameraVehicle(params){
+        return httpGet(base.ownUrl+base.CameraVehicle+'?page='+params.page+'&sort=createdAt,desc&size=40')
     },
     // 气象信息
-    getWeather(){
-        return httpGet(base.ownUrl+base.Weather)
+    getWeather(params){
+        return httpGet(base.ownUrl1+base.Weather+'?page='+params.page+'&size=10')
     },
     // 广播设备信息
     getBroadcast(){
@@ -43,11 +43,15 @@ const api={
     },
     // 创建会话
     postBroadcastCreateSession(params){
-        return httpPost(base.ownUrl+base.BroadcastCreateSession,params)
+        return httpPost(base.ownUrl1+base.BroadcastCreateSession,params)
     },
     // 实时播放
     postBroadcastSetandPlay(params){
-        return httpPost(base.ownUrl+base.BroadcastSetandPlay,params)
+        return httpPost(base.ownUrl1+base.BroadcastSetandPlay,params)
+    },
+    // 播放控制
+    postBroadcastSetStatus(params){
+        return httpPost(base.ownUrl1+base.BroadcastsetStatus,params)
     },
     // 定时任务
     postBroadcastTask(params){
@@ -68,6 +72,14 @@ const api={
     // 删除屏幕节目
     getScreenDelete(){
         return httpGet(base.ownUrl+base.ScreenDelete)
+    },
+    // 上传视频
+    postVideo(params){
+        return httpPost(base.ownUrl+base.SreenVideoUpload,params)
+    },
+    // 上传图片
+    postPicture(params){
+        return httpPost(base.ownUrl+base.SreenPicUpload,params)
     },
     // 获取无线网列表
     getWifis(){

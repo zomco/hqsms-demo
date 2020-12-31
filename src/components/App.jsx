@@ -11,7 +11,8 @@ import ScreenContent from "./screen/ScreenContent"
 import Wifi from "./wifi/Wifi"
 import Charging from "./charging/Charfing"
 import Alarm from "./alarm/Alarm"
-import AContent from "./alarm/Content"
+import AlarmContent from "./alarm/AlarmContent"
+
 
 
 
@@ -32,7 +33,7 @@ export default class App extends React.Component{
         <Layout>
         <Sider width={250} style={{ minHeight: '100vh', color: 'white' }}>
         <div style={{ height: '32px', background: 'rgba(255,255,255,.2)', margin: '16px'}}/>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
+          <Menu theme="dark" mode="inline">
           <Menu.Item key="4">
             <Link to="/">气象传感器</Link>
             </Menu.Item>
@@ -70,7 +71,7 @@ export default class App extends React.Component{
               title={<span>报警器</span>}
               >
                 <Menu.Item key="12"><Link to="/alarm">设备信息</Link></Menu.Item>
-                <Menu.Item key="13"><Link to="/alram/contents">设备数据</Link></Menu.Item>
+                <Menu.Item key="13"><Link to="/alarm/content">设备数据</Link></Menu.Item>
             </SubMenu>
 
             <Menu.Item key="10">
@@ -93,7 +94,7 @@ export default class App extends React.Component{
             <Route path="/screen/contents" component={ScreenContent}></Route>
             <Route path="/wifi" component={Wifi}></Route>
             <Route exact path="/alarm" component={Alarm}></Route>
-            <Route path="/alarm/contents" component={AContent}></Route>
+            <Route exact path="/alarm/content" component={AlarmContent}></Route>
             <Route path="/charging" component={Charging}></Route>
             
             {/* </div> */}

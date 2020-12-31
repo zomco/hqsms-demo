@@ -1,6 +1,11 @@
 import React from 'react'
 import api from '../../api'
-import {Spin,Table,Popconfirm,Button,Upload} from 'antd'
+import CollectionsPage from './upLoad'
+import {Spin,Table,Popconfirm,Button,Upload,Form} from 'antd'
+
+
+const action1='http://47.115.144.65/api/screen-contents/picture'
+const action2='http://47.115.144.65/api/screen-contents/video'
 export default class ScreenContent extends React.Component{
     // 列表表头
     columns=[
@@ -47,6 +52,8 @@ export default class ScreenContent extends React.Component{
             isLoading:true,
             dataSourse:[],
             video:[],
+            List:[],
+            fileType:""
             
         }
     }
@@ -98,6 +105,8 @@ export default class ScreenContent extends React.Component{
         })
     }
 
+    
+
      // 删除处理
      handleDelete = (key) => {
         const {dataSource} = this.state
@@ -124,6 +133,7 @@ export default class ScreenContent extends React.Component{
         return(
             <>
             <h3>屏幕内容信息</h3>
+            <CollectionsPage />
             <Table columns={this.columns} dataSource={this.state.dataSource} />
             </> 
             )
