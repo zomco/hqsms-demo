@@ -12,8 +12,8 @@ export function httpPost(url,params){
         method:"POST",
         headers:{
     
-             "Content-type":'application/x-www-form-urlencoded',
-            // "Content-type":'application/json',
+            //  "Content-type":'application/x-www-form-urlencoded',
+            "Content-type":'application/json',
             // 'Content-Type': 'multipart/form-data',
             "Accept":"application/json,text/plain,*/*",
 

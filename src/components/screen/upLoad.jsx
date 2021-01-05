@@ -46,7 +46,7 @@ return (
             console.log(values);
             
             if (values.file[0].type==="audio/mpeg") {
-                api.postVideo({"termIds":"1","file":values.file[0]})
+                api.postVideo(values)
                 .then(res=>res.json())
                 .then(data=>console.log(data))
             }else if(values.file[0].type==="image/jpeg"){

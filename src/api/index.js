@@ -81,6 +81,17 @@ const api={
     postPicture(params){
         return httpPost(base.ownUrl+base.SreenPicUpload,params)
     },
+    // 获取屏幕计划
+    getScreenPlan(){
+        return httpGet(base.ownUrl1+base.SreenPlans)
+    },
+    // 更新屏幕计划
+    postScreenPlanUpdata(params){
+        return httpPost(base.ownUrl+base.ScreenPlanUpdate,params)
+    },
+    getScreenPlanDel(params){
+        return httpGet(base.ownUrl+base.ScreenPlansDel+'?planId='+params.planId)
+    },
     // 获取无线网列表
     getWifis(){
         return httpGet(base.ownUrl+base.Wifi)
