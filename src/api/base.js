@@ -25,6 +25,10 @@ const base={
     ScreenContents:"/screen-contents/",
     SreenPicUpload:"/screen-contents/picture",
     SreenVideoUpload:"/screen-contents/video",
+    SreenPlans:"/screen-plans/",
+    ScreenPlansDel:"/screen-plans/",
+    ScreenPlanUpdate:"/screen-plans/update",
+
     ScreenDelete:"/screen-contents/program",
 
     Wifi:"/wifis",
