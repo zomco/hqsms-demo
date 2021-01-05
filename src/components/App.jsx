@@ -8,6 +8,7 @@ import BroadcastContent from "./broadcast/BroadcastContent"
 import BroadcastTask from "./broadcast/BroadcastTask"
 import Screen from "./screen/Screen"
 import ScreenContent from "./screen/ScreenContent"
+import ScreenPlan from "./screen/ScreenTask"
 import Wifi from "./wifi/Wifi"
 import Charging from "./charging/Charfing"
 import Alarm from "./alarm/Alarm"
@@ -60,9 +61,10 @@ export default class App extends React.Component{
               >
                 <Menu.Item key="8"><Link to="/screen">设备信息</Link></Menu.Item>
                 <Menu.Item key="9"><Link to="/screen/contents">屏幕内容</Link></Menu.Item>
+                <Menu.Item key="10"><Link to="/screen/plans">屏幕计划</Link></Menu.Item>
             </SubMenu>
             
-            <Menu.Item key="">
+            <Menu.Item key="11">
             <Link to="/wifi">WIFI</Link>
             </Menu.Item>
 
@@ -74,7 +76,7 @@ export default class App extends React.Component{
                 <Menu.Item key="13"><Link to="/alarm/content">设备数据</Link></Menu.Item>
             </SubMenu>
 
-            <Menu.Item key="10">
+            <Menu.Item key="14">
             <Link to="/charging">充电桩</Link>
             </Menu.Item>
             
@@ -92,6 +94,7 @@ export default class App extends React.Component{
             <Route path="/broadcast/task" component={BroadcastTask}></Route>
             <Route exact path="/screen" component={Screen}></Route>
             <Route path="/screen/contents" component={ScreenContent}></Route>
+            <Route path="/screen/plans" component={ScreenPlan}></Route>
             <Route path="/wifi" component={Wifi}></Route>
             <Route exact path="/alarm" component={Alarm}></Route>
             <Route exact path="/alarm/content" component={AlarmContent}></Route>
