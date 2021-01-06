@@ -104,22 +104,26 @@ export default class ScreenPlan extends React.Component{
         .then(data=>{
             console.log(data);
             let datas=[]
-            data.map((element,index)=>(
-                datas.push({
-                    key:index,
-                    createdAt:element.createdAt.substring(0,10),
-                    cron:element.cron,
-                    deletedAt:element.deletedAt===null?'无':element.deletedAt,
-                    endDate:element.endDate===null?'无':element.endDate,
-                    enable:element.enable===true?'是':'否',
-                    id:element.id,
-                    planName:element.planName,
-                    jobName:element.jobName,
-                    screenId:element.screenId,
-                    startTime:element.startTime===null?'无':element.startTime,
-                    updatedAt:element.updatedAt===null?'暂无更新':element.updatedAtnull,
-                })
-            ));
+            if (data!==null) {
+                data.content.map((element,index)=>(
+                    datas.push({
+                        key:index,
+                        createdAt:element.createdAt.substring(0,10),
+                        cron:element.cron,
+                        deletedAt:element.deletedAt===null?'无':element.deletedAt,
+                        endDate:element.endDate===null?'无':element.endDate,
+                        enable:element.enable===true?'是':'否',
+                        id:element.id,
+                        planName:element.planName,
+                        jobName:element.jobName,
+                        screenId:element.screenId,
+                        startTime:element.startTime===null?'无':element.startTime,
+                        updatedAt:element.updatedAt===null?'暂无更新':element.updatedAtnull,
+                    })
+                ));
+            }else{
+                alert("没有数据")
+            }
             this.setState({
                 dataSource:datas,
                 isLoading:false

@@ -86,17 +86,21 @@ export default class ScreenContent extends React.Component{
         .then(data=>{
             console.log(data);
             let datas=[]
-            data.map((element,index)=>(
-                datas.push({
-                    key:index,
-                    id:element.id,
-                    planId:element.planId===null?'空':element.planId,
-                    resolution:element.resolution===null?'空':element.resolution,
-                    type:element.type,
-                    size:element.size,
-                    updatedAt:element.updatedAt===null?'暂无更新':element.updatedAtnull,
-                })
-            ));
+            if (data!==null) {
+                data.content.map((element,index)=>(
+                    datas.push({
+                        key:index,
+                        id:element.id,
+                        planId:element.planId===null?'空':element.planId,
+                        resolution:element.resolution===null?'空':element.resolution,
+                        type:element.type,
+                        size:element.size,
+                        updatedAt:element.updatedAt===null?'暂无更新':element.updatedAtnull,
+                    })
+                ));
+            }else{
+                alert("没有数据")
+            }
             this.setState({
                 dataSource:datas,
                 isLoading:false

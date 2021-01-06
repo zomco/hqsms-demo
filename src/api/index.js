@@ -27,7 +27,7 @@ const api={
     },
     // 气象信息
     getWeather(params){
-        return httpGet(base.ownUrl1+base.Weather+'?page='+params.page+'&size=10')
+        return httpGet(base.ownUrl+base.Weather+'?page='+params.page+'&size=10')
     },
     // 广播设备信息
     getBroadcast(){
@@ -43,15 +43,15 @@ const api={
     },
     // 创建会话
     postBroadcastCreateSession(params){
-        return httpPost(base.ownUrl1+base.BroadcastCreateSession,params)
+        return httpPost(base.ownUrl+base.BroadcastCreateSession,params)
     },
     // 实时播放
     postBroadcastSetandPlay(params){
-        return httpPost(base.ownUrl1+base.BroadcastSetandPlay,params)
+        return httpPost(base.ownUrl+base.BroadcastSetandPlay,params)
     },
     // 播放控制
     postBroadcastSetStatus(params){
-        return httpPost(base.ownUrl1+base.BroadcastsetStatus,params)
+        return httpPost(base.ownUrl+base.BroadcastsetStatus,params)
     },
     // 定时任务
     postBroadcastTask(params){
@@ -83,7 +83,7 @@ const api={
     },
     // 获取屏幕计划
     getScreenPlan(){
-        return httpGet(base.ownUrl1+base.SreenPlans)
+        return httpGet(base.ownUrl+base.SreenPlans)
     },
     // 更新屏幕计划
     postScreenPlanUpdata(params){
