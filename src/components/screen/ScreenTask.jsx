@@ -1,7 +1,88 @@
-import React from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import api from '../../api'
-import {Spin,Table,Popconfirm,Button,Upload,Form} from 'antd'
+import {Spin,Table,Popconfirm,Button,Input,Form} from 'antd'
 import UploadTask from "./upLoadTask"
+
+const EditableContext = React.createContext(null);
+const EditableRow = ({ index, ...props }) => {
+    const [form] = Form.useForm();
+    return (
+      <Form form={form} component={false}>
+        <EditableContext.Provider value={form}>
+          <tr {...props} />
+        </EditableContext.Provider>
+      </Form>
+    );
+  };
+  
+  const EditableCell = ({
+    title,
+    editable,
+    children,
+    dataIndex,
+    record,
+    handleSave,
+    ...restProps
+  }) => {
+    const [editing, setEditing] = useState(false);
+    const inputRef = useRef(null);
+    const form = useContext(EditableContext);
+    useEffect(() => {
+      if (editing) {
+        inputRef.current.focus();
+      }
+    }, [editing]);
+  
+    const toggleEdit = () => {
+      setEditing(!editing);
+      form.setFieldsValue({
+        [dataIndex]: record[dataIndex],
+      });
+    };
+  
+    const save = async () => {
+      try {
+        const values = await form.validateFields();
+        toggleEdit();
+        handleSave({ ...record, ...values });
+      } catch (errInfo) {
+        console.log('Save failed:', errInfo);
+      }
+    };
+  
+    let childNode = children;
+  
+    if (editable) {
+      childNode = editing ? (
+        <Form.Item
+          style={{
+            margin: 0,
+          }}
+          name={dataIndex}
+          rules={[
+            {
+              required: true,
+              message: `${title} is required.`,
+            },
+          ]}
+        >
+          <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+        </Form.Item>
+      ) : (
+        <div
+          className="editable-cell-value-wrap"
+          style={{
+            paddingRight: 24,
+          }}
+          onClick={toggleEdit}
+        >
+          {children}
+        </div>
+      );
+    }
+  
+    return <td {...restProps}>{childNode}</td>;
+  };
 
 export default class ScreenPlan extends React.Component{
     // 列表表头
@@ -12,7 +93,8 @@ export default class ScreenPlan extends React.Component{
         },
         {
             title:'cron',
-            dataIndex:'cron'
+            dataIndex:'cron',
+            editable: true,
         },
         {
             title:'deletedAt',
@@ -20,7 +102,8 @@ export default class ScreenPlan extends React.Component{
         },
         {
             title:'enable',
-            dataIndex:'enable'
+            dataIndex:'enable',
+            editable: true,
         },
         {
             title:'endDate',
@@ -58,7 +141,9 @@ export default class ScreenPlan extends React.Component{
             <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key,text.id)}>
                 <Button key={1} type={"primary"} danger style={{marginRight:"3px"}}>删除</Button>  
             </Popconfirm>
-            <Button key={1} type={"primary"} onClick={()=>this.handleUpdata(text.id,text.cron)}style={{marginRight:"3px"}}>更新</Button>
+            <Popconfirm title="是否修改?" onConfirm={()=>this.handleUpdata(text.id,text.cron,text.enable)}>
+            <Button key={1} type={"primary"} style={{marginRight:"3px"}}>修改</Button>
+            </Popconfirm>
             </div>
             ):null ,
         },
@@ -75,28 +160,6 @@ export default class ScreenPlan extends React.Component{
             
         }
     }
-
-    // 投放处理
-    // getUrl = {
-    //     name: 'file',
-    //     action: 'http://192.168.1.20:8080/api/screen-contents/video',
-    //     headers: {
-    //       authorization: 'authorization-text'
-    //     },
-    //   };
-    // handleChange=(info) => {
-    // if (info.file.status !== 'uploading') {
-    //     console.log(info.file, info.fileList);
-    // }
-    // if (info.file.status === 'done') {
-    //     this.setState({
-    //         video:info.file.fileList,
-    //         programId:info.file.response.ProgramId
-    //     })
-    // } else if (info.file.status === 'error') {
-    //     message.error(`${info.file.name} 上传失败`);
-    // }
-    // }
 
     componentDidMount(){
         api.getScreenPlan()
@@ -144,32 +207,64 @@ export default class ScreenPlan extends React.Component{
       };
 
     // 更新处理
-    handleUpdata=(id,cron)=>{
+    handleUpdata=(id,cron,enable)=>{
+        console.log(enable);
         api.postScreenPlanUpdata({
             "cronExpr":cron,
-            "enable":true,
+            "enable":enable==='是'?true:false,
             "planId":id
         })
         .then(res=>res.json())
         .then(data=>console.log(data))
     }
 
-    render(){
+    handleSave = (row) => {
+        const newData = [...this.state.dataSource];
+        const index = newData.findIndex((item) => row.key === item.key);
+        const item = newData[index];
+        newData.splice(index, 1, { ...item, ...row });
+        this.setState({
+          dataSource: newData,
+        });
+      };
 
-    if (this.state.isLoading) {
-        return(
-            <Spin size="large" style={{padding:"50% 50%"}}></Spin>
-        )
-    }else{
-        return(
-            <>
-            <h3>屏幕计划信息</h3>
-            {/* <CollectionsPage /> */}
-            <UploadTask />
-            <Table columns={this.columns} dataSource={this.state.dataSource} />
-            </> 
+    render(){
+        const components = {
+        body: {
+            row: EditableRow,
+            cell: EditableCell,
+        },
+        };
+        const columns = this.columns.map((col) => {
+        if (!col.editable) {
+            return col;
+        }
+        return {
+            ...col,
+            onCell: (record) => ({
+              record,
+              editable: col.editable,
+              dataIndex: col.dataIndex,
+              title: col.title,
+              handleSave: this.handleSave,
+            }),
+          };
+        });
+
+        if (this.state.isLoading) {
+            return(
+                <Spin size="large" style={{padding:"50% 50%"}}></Spin>
             )
+        }else{
+            return(
+                <>
+                <h3>屏幕计划信息</h3>
+                {/* <CollectionsPage /> */}
+                <UploadTask />
+                <Table components={components} rowClassName={() => 'editable-row'} bordered columns={columns} dataSource={this.state.dataSource} />
+                </> 
+                )
+        }
+        
     }
-    
-}
 }

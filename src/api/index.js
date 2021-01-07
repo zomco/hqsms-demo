@@ -75,11 +75,11 @@ const api={
     },
     // 上传视频
     postVideo(params){
-        return httpPost(base.ownUrl+base.SreenVideoUpload,params)
+        return httpPost(base.ownUrl1+base.SreenVideoUpload,params)
     },
     // 上传图片
     postPicture(params){
-        return httpPost(base.ownUrl+base.SreenPicUpload,params)
+        return httpPost(base.ownUrl1+base.SreenPicUpload,params)
     },
     // 获取屏幕计划
     getScreenPlan(){
