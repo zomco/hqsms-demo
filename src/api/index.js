@@ -27,7 +27,7 @@ const api={
     },
     // 气象信息
     getWeather(params){
-        return httpGet(base.ownUrl+base.Weather+'?page='+params.page+'&size=10')
+        return httpGet(base.ownUrl+base.Weather+'?page='+params.page+'&sort=createdAt,&size=10')
     },
     // 广播设备信息
     getBroadcast(){
