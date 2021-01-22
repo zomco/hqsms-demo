@@ -31,8 +31,6 @@ return (
     >
     <Form
         form={form}
-        // enctype="multipart/form-data"
-        // encType="multipart/form-data"
         layout="vertical"
         name="form_in_modal"
         style={{marginLeft:"5px"}}

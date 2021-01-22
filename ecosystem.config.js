@@ -13,7 +13,7 @@ module.exports = {
       repo : 'git@github.com:zomco/hqsms-demo.git',
       path : '/var/www/production',
       'pre-deploy-local': '',
-      'post-deploy' : 'npm install && npm run build && pm2 startOrRestart ecosystem.config.js --env production',
+      'post-deploy' : 'npm install && npm run build && pm2 reload ecosystem.config.js --env production',
       'pre-setup': ''
     }
   }

@@ -13,6 +13,7 @@ import Wifi from "./wifi/Wifi"
 import Charging from "./charging/Charfing"
 import Alarm from "./alarm/Alarm"
 import AlarmContent from "./alarm/AlarmContent"
+import Begin from "./Begin"
 
 
 
@@ -36,7 +37,7 @@ export default class App extends React.Component{
         <div style={{ height: '32px', background: 'rgba(255,255,255,.2)', margin: '16px'}}/>
           <Menu theme="dark" mode="inline">
           <Menu.Item key="4">
-            <Link to="/">气象传感器</Link>
+            <Link to="/weather">气象传感器</Link>
             </Menu.Item>
             <SubMenu
               key="sub1"
@@ -85,7 +86,8 @@ export default class App extends React.Component{
         <Layout >
           <Content style={{ margin: '25px 25px',padding:'50px 50px',background: '#fff',minHeight:480 }}>
             {/* <div style={{ padding: 24, background: '#fff', minHeight: 360 }}> */}
-            <Route exact path="/" component={Weather} />
+            <Route exact path="/myapp" component={Begin} />
+            <Route exact path="/weather" component={Weather} />
             <Route exact path="/camera" component={CameraVideo} />
             <Route exact path="/camera/human" component={CameraHuman} />
             <Route path="/camera/vehicle" component={CameraVehicle}></Route>

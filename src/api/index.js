@@ -27,7 +27,7 @@ const api={
     },
     // 气象信息
     getWeather(params){
-        return httpGet(base.ownUrl+base.Weather+'?page='+params.page+'&size=10')
+        return httpGet(base.ownUrl+base.Weather+'?page='+params.page+'&sort=createdAt,&size=10')
     },
     // 广播设备信息
     getBroadcast(){
@@ -75,11 +75,11 @@ const api={
     },
     // 上传视频
     postVideo(params){
-        return httpPost(base.ownUrl+base.SreenVideoUpload,params)
+        return httpPost(base.ownUrl1+base.SreenVideoUpload,params)
     },
     // 上传图片
     postPicture(params){
-        return httpPost(base.ownUrl+base.SreenPicUpload,params)
+        return httpPost(base.ownUrl1+base.SreenPicUpload,params)
     },
     // 获取屏幕计划
     getScreenPlan(){

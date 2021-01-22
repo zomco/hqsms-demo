@@ -6,16 +6,16 @@ import api from '../../api';
 
 const normFile = e => {
     console.log('Upload event:', e);
-    // if (Array.isArray(e)) {
-    //     return e;
-    // }
-    return  e.fileList
+    if (Array.isArray(e)) {
+        return e;
+    }
+    return  e&&e.fileList
   };
-// const beforeUpload =file=>{
-//     let reader = new FileReader();
-//     reader.readAsBinaryString(file);
-//     return false
-// }
+const beforeUpload =file=>{
+    let reader = new FileReader();
+    reader.readAsBinaryString(file);
+    return false
+}
 const CollectionCreateForm = ({ visible, onCreate, onCancel }) => {
 
 const [form] = Form.useForm();
@@ -114,7 +114,7 @@ return (
             valuePropName="file"
             getValueFromEvent={normFile}
         >
-            <Upload name="test" beforeUpload={()=>{return false}} listType="file">
+            <Upload name="test" beforeUpload={beforeUpload} listType="file">
             <Button icon={<UploadOutlined />}>点击上传图片/视频</Button>
             </Upload>
         </Form.Item>

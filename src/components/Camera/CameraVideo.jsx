@@ -2,7 +2,7 @@ import React from 'react'
 import api from '../../api'
 import moment from 'moment'
 import VideoPlay from "./VideoPlayer";
-import { Menu,Modal,Input,DatePicker  } from 'antd'
+import { Menu,Modal,Input,DatePicker,Button  } from 'antd'
 
 import img1 from '../../imgs/1/1.jpg'
 import img2 from '../../imgs/1/2.jpg'
@@ -36,6 +36,8 @@ export default class CameraVideo extends React.Component{
     state = {
         current: 'yulan',
         inputValue:0,
+        showElm:false,
+        btnPlay:'inline-block',
         isModalVisible:false,
         setModalVisible:false,
         videoDisplay:'none',
@@ -56,6 +58,8 @@ export default class CameraVideo extends React.Component{
         .then(data=>console.log(data))
         this.setState({
             isModalVisible:false,
+            
+            btnPlay:'none',
             videoDisplay:'block',
             yutaiDisplay:'block',
             hfVideoDisplay:"none",
@@ -76,6 +80,8 @@ export default class CameraVideo extends React.Component{
     api.postCameraPlay({"startTime": this.state.date1,"endTime": this.state.date2})
     this.setState({
         setModalVisible:false,
+        showElm:true,
+        btnPlay:'none',
         videoDisplay:'none',
         yutaiDisplay:'none',
         hfVideoDisplay:'block',
@@ -135,29 +141,32 @@ export default class CameraVideo extends React.Component{
         };
       }
       
-        
+    handleLook=()=>{
+        this.setState({
+            showElm:true,
+            isModalVisible:true,
+        })
+    }
+    handleReturn=()=>{
+        this.setState({
+            current: 'huifang',
+            showElm:true,
+            setModalVisible:true,
+        })
+    }
 
     render(){
         const {current} = this.state;
         return(
-            <div>
-            <Menu selectedKeys={[current]} mode="horizontal">
-            
-                <Menu.Item key="yulan" onClick={this.handleClick}>
-                预览
-                </Menu.Item>
-                <Menu.Item key="huanfang" onClick={this.handleHuifang}>
-                回放
-                </Menu.Item>
-            
-            </Menu>
-
+           <>
+            <Button size="large" onClick={this.handleLook} type="primary" style={{display:this.state.btnPlay,margin:"100px 50px 800px 200px"}}>预览</Button>
+            <Button size="large" onClick={this.handleReturn} type ="primary" style={{display:this.state.btnPlay}}>回放</Button>
             <Modal title="预览" width="250px" visible={this.state.isModalVisible} onOk={this.handleOk} onCancel={this.handleCancel}>
-                预览{<Input onChange={this.handleInput} style={{display:"inline",width:"48px"}}/>}分钟
+                        预览{<Input onChange={this.handleInput} style={{display:"inline",width:"48px"}}/>}分钟
             </Modal>
             <Modal title="回放" width="400px" visible={this.state.setModalVisible} onOk={this.handleOk1} onCancel={this.handleCancel1}>
                 <RangePicker
-               
+                
                 showTime={{
                     hideDisabledOptions: true,
                     defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
@@ -166,64 +175,75 @@ export default class CameraVideo extends React.Component{
                 format="YYYY-MM-DD HH:mm:ss"
                 />
             </Modal>
-                <div className="video_container" style={{overflow:"hidden"}}>
-                    {/* 直播 */}
-                    {/* <video id="media" ref="media" className="video" controls="true" webkit-controls width="75%" src={this.state.data1} style={{display:this.state.videoDisplay,float:"left"}}
-                    ></video> */}
-                    <VideoPlay src={this.state.data1}></VideoPlay>
-            
-                    {/* 回放 */}
-                    {/* <video id="media" ref="media" className="video1" controls="true" webkit-controls width="100%" style={{display:this.state.hfVideoDisplay}}
-                    src={this.state.data2}></video> */}
-                    <VideoPlay src={this.state.data2}></VideoPlay>
-                    {/* 云台 */}
-                    <div className="video_yuntai" style={{display:this.state.yutaiDisplay}}>
-                    <p style={{fontSize:"30px",textAlign:"center"}}>云台</p>
-                    <hr/>
-                        <div className="1" style={{float:"left"}}>
-                            <img src={img1} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":25,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img2} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":21,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img3} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":26,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <br/>
-                            <img src={img4} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":23,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img5} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":29,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img6} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":24,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <br/>
-                            <img src={img7} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":27,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img8} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":22,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img9} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":28,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                        </div>
-                        <div className="2" style={{float:"left"}}>
-                            <img src={img10} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":11,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img11} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":12,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <br/>
-                            <img src={img12} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":13,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img13} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":14,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <br/>
-                            <img src={img14} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":15,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-                            <img src={img15} alt=""
-                            onClick={()=>{api.postCameraPtz({"command":16,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
-
-                        </div>
+            {
+                this.state.showElm?(
+                    <div>
+                    <Menu selectedKeys={[current]} mode="horizontal">
                     
+                        <Menu.Item key="yulan" onClick={this.handleClick}>
+                        预览
+                        </Menu.Item>
+                        <Menu.Item key="huifang" onClick={this.handleHuifang}>
+                        回放
+                        </Menu.Item>
+                    
+                    </Menu>
+                        <div className="video_container" style={{overflow:"hidden"}}>
+                            {/* 直播 */}
+                            <VideoPlay src={this.state.data1}></VideoPlay>
+                            {/* 回放 */}
+                            <VideoPlay src={this.state.data2}></VideoPlay>
+                            {/* 云台 */}
+                            <div className="video_yuntai" style={{display:this.state.yutaiDisplay}}>
+                            <p style={{fontSize:"30px",textAlign:"center"}}>云台</p>
+                            <hr/>
+                                <div className="1" style={{float:"left"}}>
+                                    <img src={img1} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":25,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <img src={img2} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":21,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <img src={img3} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":26,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <br/>
+                                    <img src={img4} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":23,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <img src={img5} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":29,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <img src={img6} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":24,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <br/>
+                                    <img src={img7} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":27,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <img src={img8} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":22,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <img src={img9} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":28,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                </div>
+                                <div className="2" style={{float:"left"}}>
+                                    <img src={img10} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":11,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <img src={img11} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":12,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <br/>
+                                    <img src={img12} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":13,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <img src={img13} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":14,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <br/>
+                                    <img src={img14} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":15,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+                                    <img src={img15} alt=""
+                                    onClick={()=>{api.postCameraPtz({"command":16,"duration":0,"speed":1}).then(res=>res.json()).then(data=>console.log(data))}}/>
+        
+                                </div>
+                            
+                            </div>
+                        </div>
+                        
                     </div>
-                </div>
-                
-            </div>
+                ):null
+            }
+           </>
         )
     }
 }
