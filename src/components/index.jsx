@@ -1,11 +1,12 @@
 import React,{Component} from 'react'
 import {Map,Markers} from 'react-amap'
-import { Modal , Input , } from 'antd'
-import './style/search.css'
+import { Space , Input , } from 'antd'
+// import './style/search.css'
 import {
     EnvironmentOutlined
   } from '@ant-design/icons';
 const mapKey = '723446c9dd673ab54bbab5ae0b3dc011' //需要去高德官网上去申请
+const { Search } = Input;
 let that;
 class MyMap extends Component {
 	constructor (props) {
@@ -14,8 +15,9 @@ class MyMap extends Component {
         this.state={
             value:'',
             visible:true,
+            address:'佛山市',
+            distance:'禅城区',
             center:[113.109701,23.018782],
-            modelVisible:true,
             context: [],
             assetCount: [],
             markList: [
@@ -49,73 +51,24 @@ class MyMap extends Component {
             ]
         }
         }
+
+    
+        onSearch = value => {
+            console.log(value)
+            if (value==='1号灯杆') {
+                AMap.event.addDomListener(document.getElementById('pantoBtn'), 'click', function() {
+                    map.panTo([116.405467, 39.907761]);
+                });
+            }
+        };
         handelChange=(value)=>{
             this.setState({
                 value:value
             })
         }
        
-        // 查询事件
-        onOk=()=>{
-            console.log("查询");
-            let auto
-            let placeSearch
-            window.AMap.plugin('AMap.Autocomplete', () => {
-                auto = new window.AMap.Autocomplete({
-                    input: 'tipinput',
-                    pageSize: 10,
-                    pageIndex: 1,
-                    citylimit: true,    // 仅搜索本城市的地名
-                    city: '佛山', // 限制为只能搜索当前地区的位置
-                    outPutDirAuto: true
-                });
-            })
-            // 创建搜索实例
-            window.AMap.plugin('AMap.PlaceSearch', () => {
-                placeSearch = new window.AMap.PlaceSearch({
-                    input: 'tipinput',
-                    pageSize: 10,
-                    pageIndex: 1,
-                    citylimit: true,    // 仅搜索本城市的地名
-                });
-            })
-            window.AMap.event.addListener(auto, "select", (e) => {
-                placeSearch.search(e.poi.name)
-            })
-            
-        }
-        
-
-        selectAddress = {
-            // created必须要拥有,用来初始化创建相应对象
-            created: () => {
-                let auto
-                let placeSearch
-                window.AMap.plugin('AMap.Autocomplete', () => {
-                    auto = new window.AMap.Autocomplete({
-                        input: 'tipinput',
-                        pageSize: 10,
-                        pageIndex: 1,
-                        citylimit: true,    // 仅搜索本城市的地名
-                        city: '佛山', // 限制为只能搜索当前地区的位置
-                        outPutDirAuto: true
-                    });
-                })
-                // 创建搜索实例
-                window.AMap.plugin('AMap.PlaceSearch', () => {
-                    placeSearch = new window.AMap.PlaceSearch({
-                        input: 'tipinput',
-                        pageSize: 10,
-                        pageIndex: 1,
-                        citylimit: true,    // 仅搜索本城市的地名
-                    });
-                })
-                window.AMap.event.addListener(auto, "select", (e) => {
-                    placeSearch.search(e.poi.name)
-                })
-            }
-        }
         //自定义icon代码
+        
         renderLayout(extData) {
             if(extData.context==="1号灯杆"){
                 return (
@@ -162,76 +115,30 @@ class MyMap extends Component {
 		return (
                 <div>
                 <div style={{padding:"20px",width: '100%', height: '900px'}}>
-                <Map amapkey={mapKey}
-                     center={this.state.center} useAMapUI
-                     zoom={15} 
-                     mapStyle="amap://styles/darkblue" 
-                     plugins={['ToolBar']}>
-                <Markers
-                    events={this.events2}
-                    markers={this.state.markList}
-                    render={this.renderLayout}
-                >
-                </Markers>
-                
-				</Map>
+                    <Map amapkey={mapKey}
+                        center={this.state.center} useAMapUI
+                        zoom={15} 
+                        mapStyle="amap://styles/darkblue" 
+                        plugins={['ToolBar']}>
+                    <Markers
+                        events={this.events2}
+                        markers={this.state.markList}
+                        render={this.renderLayout}
+                    >
+                    </Markers>
+                    
+                    </Map>
                
-			</div>
-            <Modal title="灯杆查询" visible={this.state.modelVisible} mask={false} width="250px" 
-                    cancelText="取消" okText="查询" onCancel={()=>{this.setState({modelVisible:false})}}  closable={false}
-                    onOk={this.onOk} 
-                    style={{position:"absolute",top:"50px",left:"50px",borderRadius:"0.3"}}
-                >
-                    <Input placeholder="请输入灯杆名称" onChange={this.handelChange} />
-                </Modal>
+                </div>
+                <div style={{position:"absolute",top:"50px",left:"50px"}}>
+                    <Space direction="vertical">
+                    <Search placeholder="请输入灯杆名称" onSearch={this.onSearch} enterButton />
+                    </Space>
+                </div>
                 </div>
 		)
 	}
 }
-
-// import React from 'react'
-// import {Form,Input} from 'antd'
-// import * as AMap from "./AMapModule"
-// class MyMap extends React.Component{
-//   render(){
-//       return(
-//         <div style={{width:'500px'}}>
-//             <Form>
-//                 <Form.Item
-//                           label={
-//                             <span>
-//                               地址
-//                             </span>
-//                           }>
-//                           {getFieldDecorator('position', {
-//                             initialValue: '北京'
-//                           })(
-//                             <Input placeholder={'请输入地址'} />
-//                             )}
-//                 </Form.Item>
-//                     <AMap 
-//                         lng={''}
-//                         lat={''}
-//                         address={getFieldValue('position')}
-//                         getMapPoint={(point)=>{
-//                             setFieldsValue({
-//                                 latitude: point.lat,
-//                                 longitude: point.lng
-//                             });
-//                         }}
-//                         getMapAddress={(address)=>{
-//                             setFieldsValue({
-//                                 position: address
-//                             });
-//                         }}
-//                     />
-                
-//             </Form>
-//             </div>
-//       )
-//   }
-// }
-
 
 
 export default MyMap
