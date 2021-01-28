@@ -47,11 +47,11 @@ const api={
     },
     // 实时播放
     postBroadcastSetandPlay(params){
-        return httpPost(base.ownUrl+base.BroadcastSetandPlay,params)
+        return httpPost(base.ownUrl+base.BroadcastSetandPlay+'?id='+params+'/status')
     },
     // 播放控制
     postBroadcastSetStatus(params){
-        return httpPost(base.ownUrl+base.BroadcastsetStatus,params)
+        return httpPost(base.ownUrl+base.BroadcastsetStatus+'/'+params.id+'/status?command='+params.command)
     },
     // 定时任务
     postBroadcastTask(params){
@@ -75,11 +75,11 @@ const api={
     },
     // 上传视频
     postVideo(params){
-        return httpPost(base.ownUrl1+base.SreenVideoUpload,params)
+        return httpPost(base.ownUrl+base.SreenVideoUpload,params)
     },
     // 上传图片
     postPicture(params){
-        return httpPost(base.ownUrl1+base.SreenPicUpload,params)
+        return httpPost(base.ownUrl+base.SreenPicUpload,params)
     },
     // 获取屏幕计划
     getScreenPlan(){

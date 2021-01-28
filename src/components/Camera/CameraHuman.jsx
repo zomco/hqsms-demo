@@ -85,10 +85,12 @@ export default class CameraHuman extends React.Component{
     render(){
         let faceUrl=""
         let getData=[]
-        getData.push (this.state.data.map((element,index)=>{
-            faceUrl="http://47.115.144.65/api/file/"+element.faceUrl
-            return <img key={index} src={faceUrl} alt="" style={{width:'130px',height:'160px',marginRight:'5px'}}/>
-            }))
+        if (this.state.data!==null) {
+            getData.push (this.state.data.map((element,index)=>{
+                faceUrl="http://47.115.144.65/api/file/"+element.faceUrl
+                return <img key={index} src={faceUrl} alt="" style={{width:'130px',height:'160px',marginRight:'5px'}}/>
+                }))
+        }
         console.log(getData);
 
         if (this.state.isLoading) {

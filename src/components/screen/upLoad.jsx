@@ -35,25 +35,11 @@ return (
             // formData.append('termsIds','1');
             form.resetFields();
             onCreate(values);
-            // let termIds=[]
-            // values.termIds.map(item=>(
-            //     termIds.push(parseInt(item))
-            // ))
-            // console.log(values.termIds);
-            // values.termIds.map(item=>{
-            //     termIds.push(parseInt(item))
-            // })
-            console.log(values);
             
-            if (values.file[0].type==="audio/mpeg") {
-                api.postVideo(values)
-                .then(res=>res.json())
-                .then(data=>console.log(data))
-            }else if(values.file[0].type==="image/jpeg"){
-                api.postPicture({"termIds":"1","file":values.file[0]})
-                .then(res=>res.json())
-                .then(data=>console.log(data))
-            }
+            console.log(values);
+            api.postPicture({"screenId":parseInt(values.termIds),"type":values.type,"file":values.file[0]})
+            .then(res=>res.json())
+            .then(data=>console.log(data))
         })
         .catch((info) => {
             console.log('上传失败:', info);
@@ -106,8 +92,23 @@ return (
             </Col>
         </Row>
         </Radio.Group> 
-
     </Form.Item>
+        <Form.Item name="type" label="请选择节目类型：">
+            <Radio.Group>
+            <Row>
+                <Col span={12}>
+                <Radio value="picture" style={{ lineHeight: '32px' }}>
+                    图片
+                </Radio>
+                </Col>
+                <Col span={12}>
+                <Radio value="video" style={{ lineHeight: '32px' }}>
+                    视频
+                </Radio>
+                </Col>
+            </Row>
+            </Radio.Group> 
+        </Form.Item>
         <Form.Item
             name="file"
             label="上传"

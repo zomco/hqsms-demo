@@ -9,7 +9,7 @@ export default(
     <div>
         {/* <Route exact path="/" component={MyMap}></Route> */}
         <Route exact path="/" component={MyMap}></Route>
-        <Route exact path="/myapp" component={App} ></Route>
+        <Route exact path="/myapp" component={App}></Route>
     </div>
   
 )
