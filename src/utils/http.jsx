@@ -11,7 +11,6 @@ export function httpPost(url,params){
     const result = fetch(url,{
         method:"POST",
         headers:{
-    
             //  "Content-type":'application/x-www-form-urlencoded',
             "Content-type":'application/json',
             // 'Content-Type': 'multipart/form-data',
@@ -20,6 +19,23 @@ export function httpPost(url,params){
         },
         // body:qs.stringify(params)
         body:JSON.stringify(params)
+    })
+    return result
+}
+export function httpPost1(url,params){
+    console.log("ffffffff");
+    console.log(params);
+    const result = fetch(url,{
+        method:"POST",
+        // headers:{
+        //     //  "Content-type":'application/x-www-form-urlencoded',
+        //     // "Content-type":'application/json',
+        //     'Content-Type': 'multipart/form-data',
+        //     // "Accept":"application/json,text/plain,*/*",
+
+        // },
+        // body:qs.stringify(params)
+        body:params
     })
     return result
 }

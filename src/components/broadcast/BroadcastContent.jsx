@@ -9,6 +9,10 @@ export default class Broadcast extends React.Component{
     super();
     this.columns=[
       {
+        title: 'broadcastId',
+        dataIndex: 'broadcastId', 
+      },
+      {
         title: 'programId',
         dataIndex: 'programId', 
       },
@@ -18,20 +22,16 @@ export default class Broadcast extends React.Component{
       },
       {
         title: 'audioType',
-        dataIndex: 'audioType', 
+        dataIndex: 'type', 
       },
       {
-        title: 'taskId',
-        dataIndex: 'taskId', 
+        title: 'Id',
+        dataIndex: 'id', 
       },
       
       {
         title: 'length',
         dataIndex: 'length', 
-      },
-      {
-        title: 'ftpUrl',
-        dataIndex: 'ftpUrl', 
       },
       {
         title: 'createdAt',
@@ -42,12 +42,13 @@ export default class Broadcast extends React.Component{
         render: (text, record) =>
         this.state.list.length >= 1 ? (
           <div>
-          <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key,record.programId)}>
+          {/* <Popconfirm title="是否删除?" onConfirm={() => this.handleDelete(record.key,record.programId)}>
             <Button key={1} type={"primary"} danger style={{marginRight:"3px"}}>删除</Button>  
-          </Popconfirm>
-          <Upload {...this.getUrl} onChange={this.onChange} showUploadList={false}>
-              <Button type = {"primary"}>上传</Button>
-          </Upload>
+          </Popconfirm> */}
+          <Button type="primary" style={{marginRight:"30px"}} danger onClick={()=>{api.postBroadcastSetStatus({"id":record.id,"command":'stop'})}}>停止</Button>
+          <Button type="primary" style={{marginRight:"30px"}} onClick={()=>{api.postBroadcastSetStatus({"id":record.id,"command":'play'})}}>播放</Button>
+          <Button type="primary" style={{marginRight:"30px"}} onClick={()=>{api.postBroadcastSetStatus({"id":record.id,"command":'pause'})}}>暂停</Button>
+          
           </div>
         ) : null,
       },
@@ -57,9 +58,9 @@ export default class Broadcast extends React.Component{
       fileList: [],
       isModalVisible  : false,
       setIsModalVisible :false,
-      programId:0,
-      sessionId:0,
-      isPalyModalVisible: false
+      id:0,
+      command:0,
+      isPalyModalVisible: false,
     }
     
     }
@@ -72,12 +73,13 @@ export default class Broadcast extends React.Component{
             data.content.map((element,index)=> (
                newlist.push({
                 key:index,
-                programId:element.programId,
+                broadcastId:element.broadcastId,
                 taskId:element.taskId,
-                audioName:element.audioName.substring(0,8),
-                audioType:element.audioType,
+                id:element.id,
+                audioName:element.contentName!==null?element.contentName.substring(0,8):null,
+                programId:element.programId,
                 length:element.length,
-                ftpUrl:element.ftpUrl,
+                type:element.type,
                 createdAt:element.createdAt.substring(0,10),
                }) 
                ));
@@ -88,25 +90,15 @@ export default class Broadcast extends React.Component{
         }); 
     }
 
-    handleDelete = (key,programId) => {
-      const list = [...this.state.list];
-      // const programId=list.filter(item=>item.programId)
-      this.setState({ list: list.filter(item => item.key !== key) });
-      // console.log(programId);
-      api.BroadcastDelete({
-        "programId":parseInt(programId) 
-      })
-      .then(res=>res.json())
-      .then(data=>console.log(data))
-    };
-   
-     
-     getUrl = {
+    getUrl = {
       name: 'file',
-      action: 'http://192.168.1.20:8080/api/broadcast-contents/upload',
+      action: 'http://47.115.144.65/api/broadcast-contents',
       headers: {
         authorization: 'authorization-text'
       },
+      data:{
+        broadcastId:1
+      }
     };
     onChange=(info) => {
       if (info.file.status !== 'uploading') {
@@ -116,36 +108,18 @@ export default class Broadcast extends React.Component{
         // console.log(info.file.response.ProgramId);
           this.setState({
             isModalVisible  : true,
-            programId:info.file.response.ProgramId
+            id:info.file.response.ProgramId
           })
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 上传失败`);
       }
     }
     
-    
+    // 上传音频
     handleOk = () => {
-      console.log(this.state.programId);
       this.setState({
         isModalVisible:false
       });
-      api.postBroadcastCreateSession({
-        "termIds":[2]
-      })
-      .then(res=>res.json())
-      .then(data=>{
-        console.log(data.sessionId);
-        console.log(this.state.programId);
-        this.setState({
-          sessionId:data.sessionId
-        })
-        api.postBroadcastSetandPlay({"sessionId":this.state.sessionId,"programId":this.state.programId})
-        .then(res=>res.json())
-        .then(data=>console.log(data))
-        this.setState({
-          isPlayModalVisible:true
-        })
-      })
     };
     handleCancel = () => {
         this.setState({
@@ -164,28 +138,19 @@ export default class Broadcast extends React.Component{
         isPalyModalVisible:false
       })
     };
-    // 停止
-    handleReturn=()=>{
-      api.postBroadcastSetStatus({"sessionId":this.state.sessionId,"status":0})
-    }
-    // 播放
-    handlePlay=()=>{
-      api.postBroadcastSetStatus({"sessionId":this.state.sessionId,"status":1})
-    }
-    // 暂停
-    handleStop=()=>{
-      api.postBroadcastSetStatus({"sessionId":this.state.sessionId,"status":2})
-    }
 
     render(){
    
     return (
         <div>
             <h1>广播</h1>
+            <Upload {...this.getUrl} onChange={this.onChange} showUploadList={false}>
+              <Button type = {"primary"}>上传</Button>
+            </Upload>
             
              {/* 实时播放弹窗 */}
-             <Modal width={300} title="上传成功！！" visible={this.state.isModalVisible} onOk={this.handleOk} onCancel={this.handleCancel}>
-              <p>是否实时播放？</p>
+             <Modal width={300} title="提示" visible={this.state.isModalVisible} onOk={this.handleOk} onCancel={this.handleCancel}>
+              <p>上传成功!</p>
             </Modal>
             {/* 控制音频播放 */}
             <Modal width={350} title="控制音频播放" visible={this.state.isPlayModalVisible} onOk={this.handleOk1} onCancel={this.handleCancel1}>

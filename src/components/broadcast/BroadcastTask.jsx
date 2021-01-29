@@ -32,7 +32,7 @@ let startTime;
 let repeatTime;
 
 let playMode;
-let termIds=[];
+let contentId;
 let programId=[];
 let enable;
 
@@ -49,7 +49,7 @@ export default class BroadcastTask extends React.Component{
                 dataIndex: 'broadcastId', 
             },
             {
-                title: '时间',
+                title: '创建时间',
                 dataIndex: 'createdAt', 
             },
             {
@@ -100,20 +100,22 @@ export default class BroadcastTask extends React.Component{
        .then(res=>res.json())
        .then(data=>{
            console.log(data);
-           data.content.map((item,index)=>(
-           newList.push({
-               key:index,
-               broadcastId:item.broadcastId,
-               createdAt:item.createdAt.substring(0,19),
-               frozen:item.frozen===0?'冻结':'启用',
-               taskId:item.taskId,
-               taskName:item.taskName,
-               playMode:item.playMode===0?'随机播放':'顺序播放',
-               repeatTime:item.repeatTime,
-               taskVol:item.taskVol,
-               startTime:item.startTime
-           })
-           ))
+           if(data!==null){
+            data.content.map((item,index)=>(
+                newList.push({
+                    key:index,
+                    broadcastId:item.contentId,
+                    createdAt:item.createdAt.substring(0,10),
+                    frozen:item.frozen===0?'冻结':'启用',
+                    taskId:item.taskId,
+                    taskName:item.planName,
+                    playMode:item.playMode===0?'随机播放':'顺序播放',
+                    repeatTime:item.repeatTime,
+                    taskVol:item.planVol,
+                    startTime:item.startTime.substring(0,10)
+                })
+                ))
+           }
        this.setState({
         list:newList
         })
@@ -187,7 +189,7 @@ export default class BroadcastTask extends React.Component{
                     .then(values => {
                       form.resetFields();
                       onCreate(values);
-                      termIds.push(parseInt(values.termIds));
+                      contentId=parseInt(values.contentId);
                       name=values.name;
                       startTime=date1;
                       repeatTime=parseInt(values.repeatTimes);
@@ -213,25 +215,25 @@ export default class BroadcastTask extends React.Component{
                 >
                     <Form.Item
                     name="name"
-                    label="任务名称"
+                    label="计划名称"
                     rules={[{ required: true, message: '请输入任务名称' }]}
                     >
                     <Input />
                     </Form.Item>
                     <Form.Item
-                    name="termIds"
-                    label="目标终端"
-                    rules={[{ required: true, message: '请输入目标终端' }]}
+                    name="contentId"
+                    label="内容Id"
+                    rules={[{ required: true, message: '请输入内容Id' }]}
                     >
                     <Input />
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                     name="proramIds"
                     label="内容编号"
                     rules={[{ required: true, message: '请输入内容编号' }]}
                     >
                     <Input />
-                    </Form.Item>
+                    </Form.Item> */}
                     <Form.Item
                     name="repeatTimes"
                     label="重复次数"
@@ -300,13 +302,13 @@ export default class BroadcastTask extends React.Component{
                         }else if(values.radio==="4"){
                             // 发送一次性任务
                             api.postBroadcastTask({
-                                "taskName":name,
+                                "planName":name,
                                 "type":type,
                                 "startTime":startTime,
                                 "playMode" :playMode,
                                 "repeatTime":repeatTime,
-                                "termIds" : termIds,
-                                "programIds":programId,
+                                "contentId" : contentId,
+                                // "programIds":programId,
                                 "enable" : enable,
                             }).then(this.setState({alert:'block'}))
                             this.setState({isVisible:false})
@@ -341,13 +343,13 @@ export default class BroadcastTask extends React.Component{
                     
                     //   发送日计划请求
                     api.postBroadcastTask({
-                        "taskName":name,
+                        "planName":name,
                         "type":type,
                         "startTime":startTime,
                         "playMode" :playMode,
                         "repeatTime":repeatTime,
-                        "termIds" : termIds,
-                        "programIds":programId,
+                        "contentId" : contentId,
+                        // "programIds":programId,
                         "enable" : enable,
                         "every":every
                     })
@@ -384,13 +386,13 @@ export default class BroadcastTask extends React.Component{
 
                             //   发送周计划请求
                             api.postBroadcastTask({
-                                "taskName":name,
+                                "planName":name,
                                 "type":type,
                                 "startTime":startTime,
                                 "playMode" :playMode,
                                 "repeatTime":repeatTime,
-                                "termIds" : termIds,
-                                "programIds":programId,
+                                "contentId" : contentId,
+                                // "programIds":programId,
                                 "enable" : enable,
                                 "every":every,
                                 "daysInWeek":daysInWeek
@@ -446,13 +448,13 @@ export default class BroadcastTask extends React.Component{
 
                             //   发送月计划请求
                             api.postBroadcastTask({
-                                "taskName":name,
+                                "planName":name,
                                 "type":type,
                                 "startTime":startTime,
                                 "playMode" :playMode,
                                 "repeatTime":repeatTime,
-                                "termIds" : termIds,
-                                "programIds":programId,
+                                "contentId" : contentId,
+                                // "programIds":programId,
                                 "enable" : enable,
                                 "every":every,
                                 "monthsInYear":monthsInYear,

@@ -16,7 +16,7 @@ export default class Map extends React.Component{
         this.marker1 = new AMap.Marker({
             icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
             position: [113.109701,23.018782],
-            title: '1号灯杆'
+            extData: '1号灯杆'
         });
         this.marker2 = new AMap.Marker({
             icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
