@@ -30,14 +30,14 @@ return (
         form
         .validateFields()
         .then((values) => {
-            // let formData = new FormData()
-            // formData.append('file','jajksdna');
-            // formData.append('termsIds','1');
             form.resetFields();
             onCreate(values);
-            
-            console.log(values);
-            api.postPicture({"screenId":parseInt(values.termIds),"type":values.type,"file":values.file[0]})
+            let formData = new FormData()
+            formData.append('file',values.file[0]);
+            formData.append('type',values.type);
+            formData.append("screenId", parseInt(values.termIds));
+
+            api.postPicture(formData)
             .then(res=>res.json())
             .then(data=>console.log(data))
         })
@@ -48,7 +48,6 @@ return (
     >
     <Form
         form={form}
-        // enctype="multipart/form-data"
         encType="multipart/form-data"
         layout="vertical"
         name="form_in_modal"

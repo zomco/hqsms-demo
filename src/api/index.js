@@ -1,4 +1,4 @@
-import {httpGet,httpPost} from '../utils/http'
+import {httpGet,httpPost,httpPost1} from '../utils/http'
 import base from './base'
 const api={
     // 查看实时视频
@@ -79,7 +79,7 @@ const api={
     },
     // 上传图片
     postPicture(params){
-        return httpPost(base.ownUrl+base.SreenPicUpload,params)
+        return httpPost1(base.ownUrl+base.SreenPicUpload,params)
     },
     // 获取屏幕计划
     getScreenPlan(){
