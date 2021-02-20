@@ -1,0 +1,8 @@
+// 1、为对应项目（ts/js）添加json文件
+// 以js项目为例，在根目录创建jsconfig.json，添加如下代码
+
+{
+    "include": [
+        "./src/*"
+    ]
+}
