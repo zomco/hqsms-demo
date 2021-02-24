@@ -166,27 +166,27 @@ export default {
   methods: {
     // 获取内容列表
     async getContentList() {
-      const { data: res } = await this.$http.get("screen-contents", {
+      const res = await this.$http.get("screen-contents", {
         params: this.queryInfo,
       });
       console.log(res);
-      //    if (res.status!==200) {
-      //        return this.$message.error("请求数据失败！")
-      //    }
+         if (res.status!==200) {
+             return this.$message.error("请求数据失败！")
+         }
       this.$message.success("获取数据成功！");
-      this.contentList = res.content;
-      this.total = res.totalPages;
+      this.contentList = res.data.content;
+      this.total = res.data.totalPages;
     },
 
     // 通过id查节目
     async queryContentById() {
-      const { data: res } = await this.$http.get(`screen-contents/${this.id}`);
-      // if (res.success !== true) {
-      //   this.$message.error("查询失败");
-      // }
+      const res = await this.$http.get(`screen-contents/${this.id}`);
+      if (res.status !== 200) {
+        this.$message.error("查询失败");
+      }
       console.log(res);
       this.contentList = [];
-      this.contentList.push(res);
+      this.contentList.push(res.data);
     },
 
     // 监听pagesize改变的时间
