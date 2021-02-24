@@ -1,39 +1,27 @@
 {
-  "name": "vuehqsms",
+  "name": "vue_hqsms",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.13.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
-    "echarts": "^5.0.2",
-    "element-ui": "^2.15.0",
+    "element-ui": "^2.4.5",
     "less": "^4.1.1",
-    "less-loader": "^8.0.0",
-    "vue": "^3.0.5",
-    "vue-router": "^4.0.0-0"
+    "less-loader": "^5.0.0",
+    "vue": "^2.6.11",
+    "vue-router": "^3.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
     "babel-plugin-component": "^1.1.1",
-    "vue-cli-plugin-element": "^1.0.1"
-  },
-  "description": "```\r npm install\r ```",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zomco/hqsms-demo.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/zomco/hqsms-demo/issues"
-  },
-  "homepage": "https://github.com/zomco/hqsms-demo#readme"
+    "vue-cli-plugin-element": "^1.0.1",
+    "vue-template-compiler": "^2.6.11"
+  }
 }

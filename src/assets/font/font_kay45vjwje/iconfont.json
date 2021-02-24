@@ -1,0 +1,51 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "6942051",
+      "name": "摄像头",
+      "font_class": "shexiangtou",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
+      "icon_id": "9235229",
+      "name": "气象",
+      "font_class": "qixiang",
+      "unicode": "e72c",
+      "unicode_decimal": 59180
+    },
+    {
+      "icon_id": "16742023",
+      "name": "广播",
+      "font_class": "guangbo",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
+      "icon_id": "17631469",
+      "name": "无线网",
+      "font_class": "wuxianwang",
+      "unicode": "e650",
+      "unicode_decimal": 58960
+    },
+    {
+      "icon_id": "18495576",
+      "name": "屏幕",
+      "font_class": "pingmu",
+      "unicode": "e6da",
+      "unicode_decimal": 59098
+    },
+    {
+      "icon_id": "19195906",
+      "name": "报警器",
+      "font_class": "baojingqi",
+      "unicode": "e730",
+      "unicode_decimal": 59184
+    }
+  ]
+}
