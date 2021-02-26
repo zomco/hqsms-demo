@@ -7,7 +7,7 @@ import axios from 'axios'
 // axios.defaults.baseURL='http://47.115.144.65/api/'
 axios.defaults.baseURL='http://192.168.1.200:8080/api/'
 //设置请求头
-axios.defaults.headers.post["Content-type"] = "application/json"
+axios.defaults.headers.post["Content-type"] = "application/x-www-form-urlencoded"
 // 将axios挂载到vue原型对象上
 Vue.prototype.$http=axios
 // 导入全局样式表
