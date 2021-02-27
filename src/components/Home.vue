@@ -51,6 +51,8 @@
             <!-- 二级菜单 -->
             <el-menu-item index="/broadcasts"
                           @click="saveNavState('/broadcasts')">设备管理</el-menu-item>
+            <el-menu-item index="/broadcasts/content"
+                          @click="saveNavState('/broadcasts/content')">内容管理</el-menu-item>
           </el-submenu>
 
           <!-- 一级菜单 -->

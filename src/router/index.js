@@ -5,6 +5,7 @@ import ScreenContent from '../components/screen/ScreenContent.vue'
 import ScreenTask from '../components/screen/ScreenTask.vue'
 import Screen from '../components/screen/Screen.vue'
 import Broadcast from '../components/broadcast/Broadcast.vue'
+import BroadcastContent from '../components/broadcast/BroadcastContent.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -16,7 +17,8 @@ const routes = [
       {path:'/screen/content',component:ScreenContent},
       {path:'/screen/task',component:ScreenTask},
       {path:'/screen',component:Screen},
-      {path:'/broadcasts',component:Broadcast}
+      {path:'/broadcasts',component:Broadcast},
+      {path:'/broadcasts/content',component:BroadcastContent},
     ]
   }
 ]

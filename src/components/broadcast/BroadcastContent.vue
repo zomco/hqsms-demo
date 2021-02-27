@@ -3,8 +3,7 @@
     <!-- 面包屑导航区域 -->
     <el-breadcrumb>
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>屏幕</el-breadcrumb-item>
-
+      <el-breadcrumb-item>广播</el-breadcrumb-item>
       <el-breadcrumb-item>内容管理</el-breadcrumb-item>
     </el-breadcrumb>
 
@@ -28,7 +27,7 @@
         </el-col>
       </el-row>
 
-      <!-- 用户列表区 -->
+      <!-- 广播列表区 -->
       <el-table :data="contentList"
                 border
                 stripe>
@@ -43,7 +42,8 @@
         <el-table-column label="状态"
                          prop="played">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.played"></el-switch>
+            <el-switch v-model="scope.row.played"
+                       @change="putContent(scope.row.id,scope.row.played)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="类型"
@@ -91,8 +91,8 @@
                  :rules="addFormRules"
                  label-width="80px">
           <el-form-item label="设备id"
-                        prop="screenId">
-            <el-input v-model="addForm.screenId"></el-input>
+                        prop="broadcastId">
+            <el-input v-model="addForm.broadcastId"></el-input>
           </el-form-item>
           <el-form-item label="内容类型"
                         prop="type">
@@ -148,12 +148,12 @@ export default {
       dialogVisible: false,
       // 添加节目表单的数据
       addForm: {
-        screenId: 0,
+        broadcastId: 0,
         type: ""
       },
       // 添加节目表单的验证规则
       addFormRules: {
-        screenId: [
+        broadcastId: [
           { required: true, message: "请输入设备id", trigger: "blur" }
         ],
         type: [{ required: true, message: "请选择内容类型", trigger: "blur" }],
@@ -167,7 +167,7 @@ export default {
   methods: {
     // 获取内容列表
     async getContentList () {
-      const res = await this.$http.get("screen-contents", {
+      const res = await this.$http.get("broadcast-contents", {
         params: this.queryInfo
       });
       console.log(res);
@@ -181,7 +181,7 @@ export default {
 
     // 通过id查节目
     async queryContentById () {
-      const res = await this.$http.get(`screen-contents/${this.id}`);
+      const res = await this.$http.get(`broadcast-contents/${this.id}`);
       if (res.status !== 200) {
         this.$message.error("查询失败");
       }
@@ -191,8 +191,47 @@ export default {
     },
 
     // 删除内容
-    deleteContent (data) {
-      console.log(data);
+    async deleteContent (data) {
+      const confirmResult = await this.$confirm('此操作将永久删除该广播内容, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).catch(error => error)
+      console.log(confirmResult);
+      if (confirmResult === 'cancel') {
+        this.$message.info('取消了删除')
+      } else if (confirmResult === 'confirm') {
+        const res = await this.$http.delete(`broadcast-contents/${data.id}`)
+        console.log(res);
+        if (res !== 200) {
+          return
+        }
+        this.$message.success("删除成功")
+        this.getContentList()
+      }
+    },
+
+    // 控制广播内容
+    async putContent (id, played) {
+      console.log(played);
+      if (!played) {
+        const res = await this.$http.post(`broadcast-contents/${id}/status`, {
+          params: { command: 'play' }
+        })
+        if (res.status !== 200) {
+          this.$message.error('请求失败')
+        }
+        this.$message.success('播放成功')
+      } else {
+        const res = await this.$http.post(`broadcast-contents/${id}/status`, {
+          params: { command: 'stop' }
+        })
+        if (res.status !== 200) {
+          this.$message.error('请求失败')
+        }
+        this.$message.success('暂停成功')
+      }
+
     },
 
     // 监听pagesize改变的时间
@@ -208,7 +247,7 @@ export default {
       this.queryInfo.page = newPage - 1;
       this.getContentList();
     },
-    // 监听添加用户对话框关闭事件
+    // 监听添加广播对话框关闭事件
     addDialogClosed () {
       this.$refs.addFormRef.resetFields();
     },
@@ -220,7 +259,7 @@ export default {
         if (!valid) {
           this.$message.error("表单验证失败!");
         }
-        const res = await this.$http.post("screen-contents", {
+        const res = await this.$http.post("broadcast-contents", {
           params: this.addForm
         });
         if (res.status !== 200) {
@@ -232,7 +271,7 @@ export default {
       });
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 </style>
