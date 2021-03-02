@@ -53,6 +53,8 @@
                           @click="saveNavState('/broadcasts')">设备管理</el-menu-item>
             <el-menu-item index="/broadcasts/content"
                           @click="saveNavState('/broadcasts/content')">内容管理</el-menu-item>
+            <el-menu-item index="/broadcasts/plan"
+                          @click="saveNavState('/broadcasts/plan')">计划管理</el-menu-item>
           </el-submenu>
 
           <!-- 一级菜单 -->
@@ -78,7 +80,10 @@
               <span>摄像头</span>
             </template>
             <!-- 二级菜单 -->
-            <el-menu-item index="4-1">选项1</el-menu-item>
+            <el-menu-item index="/camera/human"
+                          @click="saveNavState('/camera/human')">人脸照片</el-menu-item>
+            <el-menu-item index="/camera/vehicle"
+                          @click="saveNavState('/camera/vehicle')">车牌照片</el-menu-item>
           </el-submenu>
 
           <!-- 一级菜单 -->
@@ -104,7 +109,10 @@
               <span>气象传感器</span>
             </template>
             <!-- 二级菜单 -->
-            <el-menu-item index="6-1">选项1</el-menu-item>
+            <el-menu-item index="/weather"
+                          @click="saveNavState('/weather')">设备管理</el-menu-item>
+            <el-menu-item index="/weather/log"
+                          @click="saveNavState('/weather/log')">内容管理</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>

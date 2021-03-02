@@ -26,7 +26,8 @@ import { Button,
         Select,
         Option,
         Upload,
-        MessageBox
+        MessageBox,
+        Image
         } from 'element-ui'
 
 Vue.use(Button)
@@ -55,6 +56,7 @@ Vue.use(Select)
 Vue.use(FormItem)
 Vue.use(Option)
 Vue.use(Upload)
+Vue.use(Image)
 
 Vue.prototype.$message=Message
 Vue.prototype.$confirm=MessageBox.confirm
