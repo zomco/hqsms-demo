@@ -3,6 +3,15 @@ import App from './App.vue'
 import router from './router'
 import './plugins/element.js'
 import axios from 'axios'
+import echarts from 'echarts'
+// import VueAMap from 'vue-amap'
+
+// Vue.use(VueAMap)
+// VueAMap.initAMapApiLoader({
+//   key:'723446c9dd673ab54bbab5ae0b3dc011',
+//   v:'1.4.4'
+// })
+axios.prototype.$echarts=echarts
 // 配置基本请求路径
 // axios.defaults.baseURL='http://47.115.144.65/api/'
 axios.defaults.baseURL='http://192.168.1.200:8080/api/'

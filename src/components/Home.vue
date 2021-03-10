@@ -67,7 +67,10 @@
               <span>报警器</span>
             </template>
             <!-- 二级菜单 -->
-            <el-menu-item index="3-1">选项1</el-menu-item>
+            <el-menu-item index="/alarm/logs"
+                          @click="saveNavState('/alarm/logs')">内容管理</el-menu-item>
+            <el-menu-item index="/alarm"
+                          @click="saveNavState('/alarm/logs')">设备管理</el-menu-item>
           </el-submenu>
 
           <!-- 一级菜单 -->
@@ -96,7 +99,10 @@
               <span>无线网络</span>
             </template>
             <!-- 二级菜单 -->
-            <el-menu-item index="5-1">选项1</el-menu-item>
+            <el-menu-item index="/wifi"
+                          @click="saveNavState('/wifi')">设备管理</el-menu-item>
+            <el-menu-item index="/wifi/log"
+                          @click="saveNavState('/wifi/log')">内容管理</el-menu-item>>
           </el-submenu>
 
           <!-- 一级菜单 -->

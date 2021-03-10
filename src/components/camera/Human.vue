@@ -8,6 +8,10 @@
     </el-breadcrumb>
     <!-- 卡片视图区 -->
     <el-card>
+      <!-- 查找人脸区 -->
+      <el-upload>
+
+      </el-upload>
       <!-- 图片展示区 -->
       <el-row :gutter="5">
         <el-col :span="2"

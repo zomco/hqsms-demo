@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../components/Home'
+import Map from '../components/map/Map.vue'
 import ScreenContent from '../components/screen/ScreenContent.vue'
 import ScreenTask from '../components/screen/ScreenTask.vue'
 import Screen from '../components/screen/Screen.vue'
@@ -11,10 +12,14 @@ import WeatherLog from '../components/weather/WeatherLog.vue'
 import Weather from '../components/weather/Weather.vue'
 import Human from '../components/camera/Human.vue'
 import Vehicle from '../components/camera/Vehicle.vue'
+import AlarmLog from '../components/alarm/AlarmLog.vue'
+import Alarm from '../components/alarm/Alarm.vue'
+import Wifi from '../components/wifi/Wifi.vue'
+import WifiLog from '../components/wifi/WifiLog'
 Vue.use(VueRouter)
 
 const routes = [
-  {path:'/',redirect:'/home'},
+  {path:'/',component:Map},
   {
     path:'/home',
     component:Home,
@@ -28,7 +33,11 @@ const routes = [
       {path:'/weather/log',component:WeatherLog},
       {path:'/weather',component:Weather},
       {path:'/camera/human',component:Human},
-      {path:'/camera/vehicle',component:Vehicle}
+      {path:'/camera/vehicle',component:Vehicle},
+      {path:'/alarm/logs',component:AlarmLog},
+      {path:'/alarm',component:Alarm},
+      {path:'/wifi',component:Wifi},
+      {path:'wifi/log',component:WifiLog}
     ]
   }
 ]
